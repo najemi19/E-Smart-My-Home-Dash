@@ -1,0 +1,1039 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>E‑Smart Home — متعدد اللغات + ترخيص + دفع</title>
+<meta name="theme-color" content="#D4AF37">
+<style>
+:root{--bg:#0B0B0B;--panel:#111317;--gold:#D4AF37;--green:#22C55E;--muted:#9CA3AF;--white:#fff;--warn:#f59e0b;--danger:#ef4444;--line:#1f2937}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--white);font-family:system-ui,Segoe UI,Inter,Noto Sans,Noto Naskh Arabic,Arial}
+.container{max-width:1200px;margin:0 auto;padding:16px}
+.header{display:flex;gap:12px;align-items:center;justify-content:space-between}
+.brand{display:flex;gap:12px;align-items:center}
+.logo{width:40px;height:40px;border-radius:10px;background:#000;border:1px solid var(--gold);display:grid;place-items:center;color:var(--gold);font-weight:800}
+h1{margin:0;color:var(--gold);font-size:20px}
+.actions{display:flex;gap:8px;flex-wrap:wrap}
+.btn{background:#0b0b0b;color:#fff;border:1px solid var(--gold);border-radius:10px;padding:8px 12px;cursor:pointer}
+.btn.primary{background:var(--gold);color:#000;border:none}
+.btn.ghost{background:transparent;border:1px solid #333}
+select,input,textarea{background:#0b0b0b;color:#fff;border:1px solid #333;border-radius:8px;padding:8px}
+.tabs{display:flex;gap:8px;margin:16px 0;flex-wrap:wrap}
+.tab{background:transparent;color:var(--white);border:1px solid #333;padding:8px 12px;border-radius:8px;cursor:pointer}
+.tab.active{border-color:var(--gold);color:var(--gold)}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px;margin-bottom:16px}
+.panel h2{margin:0 0 12px 0;color:var(--gold);font-size:18px}
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.kpi{background:#0b0b0b;border-radius:12px;padding:12px}
+.kpi p{margin:0;color:var(--muted)}
+.kpi .value{color:#fff;font-weight:800;font-size:20px}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.card{border:1px solid var(--line);border-radius:12px;padding:12px}
+.card .muted{color:var(--muted);font-size:13px}
+.table{width:100%;border-collapse:collapse}
+.table th,.table td{padding:10px;border-bottom:1px solid #222;text-align:right}
+.badge{padding:4px 8px;border-radius:8px;font-size:12px}
+.badge.paid{background:var(--green);color:#000}
+.badge.pending{background:#3b82f6;color:#000}
+.badge.overdue{background:var(--warn);color:#000}
+.row{display:flex;gap:8px;flex-wrap:wrap;margin:8px 0}
+.section-actions{display:flex;gap:8px;flex-wrap:wrap;margin:8px 0}
+.canvas-wrap{background:#0b0b0b;border-radius:12px;padding:8px;border:1px solid #222}
+.footer{color:#888;text-align:center;border-top:1px solid #222;padding:12px;margin-top:12px}
+.notice{color:var(--muted);font-size:13px}
+.progress{height:8px;background:#222;border-radius:6px;overflow:hidden}
+.progress>i{display:block;height:100%}
+.modal{position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,.52);z-index:60}
+.modal>.box{background:#0f1115;border:1px solid var(--line);border-radius:14px;max-width:900px;width:min(94%,900px);padding:16px}
+.hints li{margin:8px 0}
+.payrow{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+.paybtn{display:inline-flex;align-items:center;gap:8px;border:1px solid #333;border-radius:10px;padding:8px 10px;background:#0b0b0b;color:#fff;cursor:pointer}
+.paybtn svg{width:18px;height:18px}
+.plans{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:12px 0}
+.plan{border:1px solid #333;border-radius:12px;padding:12px;background:#0b0b0b}
+.plan h3{margin:0 0 6px 0;color:var(--gold)}
+.sep{height:1px;background:#222;margin:12px 0}
+.assistant{position:fixed;right:16px;bottom:16px;width:320px;max-width:92vw;background:#0f1115;border:1px solid var(--line);border-radius:12px;overflow:hidden;display:flex;flex-direction:column;z-index:50}
+.assistant-header{padding:10px;background:#0b0b0b;color:var(--gold);display:flex;justify-content:space-between;align-items:center}
+.assistant-body{padding:10px;max-height:280px;overflow:auto;display:flex;flex-direction:column;gap:8px}
+.msg{padding:8px 10px;border-radius:10px;max-width:85%}
+.msg.user{align-self:flex-end;background:#223355}
+.msg.bot{align-self:flex-start;background:#1b1d24}
+.assistant-input{display:flex;gap:8px;padding:10px;border-top:1px solid #222}
+@media (max-width:900px){.kpis{grid-template-columns:1fr 1fr}.grid{grid-template-columns:1fr}.plans{grid-template-columns:1fr}}
+@media print {.actions,.tabs,.assistant,.footer,.no-print,.modal{display:none !important} body{background:#fff;color:#000} .panel{border:none}}
+</style>
+</head>
+<body>
+<div class="container">
+
+  <div class="header">
+    <div class="brand">
+      <div class="logo">e</div>
+      <h1 data-i18n="appTitle">E‑Smart Home — إدارة البيت</h1>
+    </div>
+    <div class="actions">
+      <button class="btn" id="installBtn" data-i18n="install">⬇️ تثبيت التطبيق</button>
+      <select id="langSel" class="btn" title="Language">
+        <option value="ar">العربية</option>
+        <option value="zgh">ⵜⵉⴼⵉⵏⴰⵖ</option>
+        <option value="fr">Français</option>
+        <option value="en">English</option>
+      </select>
+      <button class="btn" id="onboardingBtn" data-i18n="help">❓ إرشادات سريعة</button>
+      <button class="btn" id="shareAllBtn" data-i18n="shareSummary">📤 مشاركة ملخص</button>
+    </div>
+  </div>
+
+  <div class="tabs no-print" id="tabs">
+    <button class="tab active" data-tab="home" data-i18n="dashboard">اللوحة</button>
+    <button class="tab" data-tab="bills" data-i18n="bills">الفواتير</button>
+    <button class="tab" data-tab="pantry" data-i18n="pantry">المطبخ</button>
+    <button class="tab" data-tab="calendar" data-i18n="calendar">الرزنامة</button>
+    <button class="tab" data-tab="wallet" data-i18n="wallet">المحفظة</button>
+    <button class="tab" data-tab="reports" data-i18n="reports">التقارير</button>
+    <button class="tab" data-tab="family" data-i18n="family">العائلة</button>
+  </div>
+
+  <!-- Home -->
+  <section id="home" class="panel">
+    <h2 data-i18n="quickSummary">ملخص سريع</h2>
+    <div class="kpis">
+      <div class="kpi"><p data-i18n="kpiBills">الفواتير هذا الأسبوع</p><div class="value" id="kpiBills">0</div></div>
+      <div class="kpi"><p data-i18n="kpiLow">نقص المخزون</p><div class="value" id="kpiLow">0</div></div>
+      <div class="kpi"><p data-i18n="kpiEvent">حدث قريب</p><div class="value" id="kpiEvent">—</div></div>
+      <div class="kpi"><p data-i18n="kpiBalance">الرصيد الحالي</p><div class="value" id="kpiBalance">0</div></div>
+    </div>
+    <div class="row">
+      <div class="canvas-wrap" style="flex:1;min-width:260px">
+        <canvas id="chartIncomeExpense" width="530" height="240" aria-label="Chart"></canvas>
+      </div>
+      <div class="canvas-wrap" style="flex:1;min-width:260px">
+        <canvas id="chartCategories" width="530" height="240" aria-label="Chart"></canvas>
+      </div>
+    </div>
+    <p class="notice" data-i18n="autoUpdate">تُحدّث المؤشرات والرسوم تلقائيًا مع كل إضافة.</p>
+  </section>
+
+  <!-- Bills -->
+  <section id="bills" class="panel" style="display:none">
+    <h2 data-i18n="bills">الفواتير</h2>
+    <div class="row">
+      <input id="billProvider" placeholder="المزوّد (ONE)" data-i18n-placeholder="phProvider">
+      <input id="billAmount" type="number" placeholder="المبلغ (MAD)" data-i18n-placeholder="phAmount">
+      <input id="billDue" type="date">
+      <select id="billStatus">
+        <option value="pending" data-i18n="pending">مستحقة</option>
+        <option value="paid" data-i18n="paid">مدفوعة</option>
+      </select>
+      <button class="btn primary requires-license" id="addBill" data-i18n="add">➕ إضافة</button>
+    </div>
+    <table class="table" id="billsTable">
+      <thead><tr>
+        <th data-i18n="provider">المزوّد</th>
+        <th data-i18n="amount">المبلغ</th>
+        <th data-i18n="due">الاستحقاق</th>
+        <th data-i18n="status">الحالة</th>
+        <th></th></tr></thead>
+      <tbody></tbody>
+    </table>
+    <div class="section-actions">
+      <button class="btn" id="shareBills" data-i18n="shareWhatsApp">📤 مشاركة عبر واتساب</button>
+      <button class="btn" onclick="printSection('bills')" data-i18n="printPdf">📄 طباعة/حفظ PDF</button>
+    </div>
+  </section>
+
+  <!-- Pantry -->
+  <section id="pantry" class="panel" style="display:none">
+    <h2 data-i18n="pantry">المطبخ والمخزون</h2>
+    <div class="row">
+      <input id="itemName" placeholder="الصنف (زيت)" data-i18n-placeholder="phItem">
+      <input id="itemQty" type="number" step="0.1" placeholder="الكمية" data-i18n-placeholder="phQty">
+      <select id="itemUnit"><option value="l">لتر</option><option value="kg">كغ</option><option value="pc">قطعة</option></select>
+      <input id="itemReorder" type="number" step="0.1" placeholder="حد إعادة الطلب" data-i18n-placeholder="phReorder">
+      <button class="btn primary requires-license" id="addItem" data-i18n="add">➕ إضافة</button>
+      <button class="btn" id="smartList" data-i18n="smartList">🛒 لائحة ذكية</button>
+    </div>
+    <div class="grid" id="pantryGrid"></div>
+    <div class="section-actions">
+      <button class="btn" id="sharePantry" data-i18n="shareWhatsApp">📤 مشاركة عبر واتساب</button>
+      <button class="btn" onclick="printSection('pantry')" data-i18n="printPdf">📄 طباعة/حفظ PDF</button>
+    </div>
+  </section>
+
+  <!-- Calendar -->
+  <section id="calendar" class="panel" style="display:none">
+    <h2 data-i18n="calendar">الرزنامة العائلية</h2>
+    <div class="row">
+      <input id="eventTitle" placeholder="عنوان الحدث (امتحان)" data-i18n-placeholder="phEventTitle">
+      <input id="eventDate" type="date">
+      <select id="eventType">
+        <option value="exam" data-i18n="exam">امتحان</option>
+        <option value="bill" data-i18n="bill">فاتورة</option>
+        <option value="birthday" data-i18n="birthday">عيد ميلاد</option>
+        <option value="other" data-i18n="other">أخرى</option>
+      </select>
+      <button class="btn primary requires-license" id="addEvent" data-i18n="add">➕ إضافة</button>
+    </div>
+    <table class="table" id="eventsTable">
+      <thead><tr>
+        <th data-i18n="title">العنوان</th>
+        <th data-i18n="date">التاريخ</th>
+        <th data-i18n="type">النوع</th>
+        <th></th></tr></thead>
+      <tbody></tbody>
+    </table>
+    <div class="section-actions">
+      <button class="btn" id="shareEvents" data-i18n="shareWhatsApp">📤 مشاركة عبر واتساب</button>
+      <button class="btn" onclick="printSection('calendar')" data-i18n="printPdf">📄 طباعة/حفظ PDF</button>
+    </div>
+  </section>
+
+  <!-- Wallet -->
+  <section id="wallet" class="panel" style="display:none">
+    <h2 data-i18n="wallet">المحفظة: الدخل والمصاريف</h2>
+    <div class="row">
+      <select id="txnType"><option value="income" data-i18n="income">دخل</option><option value="expense" data-i18n="expense">مصروف</option></select>
+      <input id="txnTitle" placeholder="الوصف (راتب/تسوق)" data-i18n-placeholder="phTxnTitle">
+      <input id="txnAmount" type="number" step="0.01" placeholder="المبلغ (MAD)" data-i18n-placeholder="phAmount">
+      <input id="txnDate" type="date">
+      <select id="txnCategory">
+        <option value="salary" data-i18n="salary">راتب</option>
+        <option value="groceries" data-i18n="groceries">مطبخ</option>
+        <option value="bills" data-i18n="bills">فواتير</option>
+        <option value="education" data-i18n="education">تعليم</option>
+        <option value="social" data-i18n="social">مناسبات</option>
+        <option value="other" data-i18n="other">أخرى</option>
+      </select>
+      <button class="btn primary requires-license" id="addTxn" data-i18n="add">➕ إضافة</button>
+    </div>
+    <div class="grid">
+      <div class="card"><strong data-i18n="sumIncome">💵 مجموع الدخل</strong><div class="muted" id="walletIncome">0 MAD</div></div>
+      <div class="card"><strong data-i18n="sumExpense">💸 مجموع المصاريف</strong><div class="muted" id="walletExpense">0 MAD</div></div>
+      <div class="card"><strong data-i18n="balance">🟢 الرصيد</strong><div class="muted" id="walletBalance">0 MAD</div></div>
+    </div>
+    <div class="row">
+      <div class="canvas-wrap" style="flex:1;min-width:260px"><canvas id="chartBalance" width="530" height="240"></canvas></div>
+      <div class="canvas-wrap" style="flex:1;min-width:260px"><canvas id="chartByCat" width="530" height="240"></canvas></div>
+    </div>
+    <table class="table" id="walletTable">
+      <thead><tr>
+        <th data-i18n="kind">النوع</th><th data-i18n="desc">الوصف</th><th data-i18n="category">الفئة</th><th data-i18n="date">التاريخ</th><th data-i18n="amount">المبلغ</th><th></th>
+      </tr></thead>
+      <tbody></tbody>
+    </table>
+    <div class="section-actions">
+      <button class="btn" id="shareWallet" data-i18n="shareWhatsApp">📤 مشاركة عبر واتساب</button>
+      <button class="btn" onclick="printSection('wallet')" data-i18n="printPdf">📄 طباعة/حفظ PDF</button>
+    </div>
+  </section>
+
+  <!-- Reports -->
+  <section id="reports" class="panel" style="display:none">
+    <h2 data-i18n="reports">التقارير والتصدير</h2>
+    <div class="row">
+      <select id="reportLang">
+        <option value="ar">العربية</option>
+        <option value="zgh">ⵜⵉⴼⵉⵏⴰⵖ</option>
+        <option value="fr">Français</option>
+        <option value="en">English</option>
+      </select>
+      <button class="btn primary" data-report="bills" data-i18n="reportBills">📄 تقرير الفواتير</button>
+      <button class="btn primary" data-report="pantry" data-i18n="reportPantry">📄 تقرير المخزون</button>
+      <button class="btn primary" data-report="events" data-i18n="reportEvents">📄 تقرير الرزنامة</button>
+      <button class="btn primary" data-report="shopping" data-i18n="reportShopping">📄 لائحة المشتريات</button>
+    </div>
+    <div class="row">
+      <button class="btn" id="shareReportBills" data-i18n="waBills">📤 واتساب الفواتير</button>
+      <button class="btn" id="shareReportPantry" data-i18n="waPantry">📤 واتساب المخزون</button>
+      <button class="btn" id="shareReportEvents" data-i18n="waEvents">📤 واتساب الرزنامة</button>
+      <button class="btn" id="shareReportShopping" data-i18n="waShopping">📤 واتساب اللائحة</button>
+    </div>
+    <p class="notice" data-i18n="reportNote">ملاحظة: في هذا الملف الموحد، للتصدير استخدم الطباعة/الحفظ كـ PDF.</p>
+  </section>
+
+  <!-- Family -->
+  <section id="family" class="panel" style="display:none">
+    <h2 data-i18n="family">العائلة والصلاحيات</h2>
+    <div class="row">
+      <input id="meName" placeholder="اسمك" data-i18n-placeholder="phYourName">
+      <input id="meEmail" placeholder="بريدك" data-i18n-placeholder="phYourEmail">
+      <select id="meRole"><option value="admin" data-i18n="roleAdmin">مسؤول (أب/أم/ولي)</option><option value="member" data-i18n="roleMember">فرد</option><option value="guest" data-i18n="roleGuest">ضيف</option></select>
+      <button class="btn primary" id="loginBtn" data-i18n="login">تسجيل الدخول</button>
+    </div>
+    <div class="row">
+      <input id="famName" placeholder="اسم فرد الأسرة" data-i18n-placeholder="phFamName">
+      <input id="famEmail" placeholder="بريده" data-i18n-placeholder="phFamEmail">
+      <select id="famRole"><option value="member" data-i18n="roleMember">فرد</option><option value="guest" data-i18n="roleGuest">ضيف</option></select>
+      <button class="btn primary requires-license" id="addFam" data-i18n="add">➕ إضافة فرد</button>
+    </div>
+    <table class="table" id="familyTable">
+      <thead><tr><th data-i18n="name">الاسم</th><th data-i18n="email">البريد</th><th data-i18n="role">الدور</th><th></th></tr></thead>
+      <tbody></tbody>
+    </table>
+    <p class="notice">© جميع الحقوق محفوظة لطارق ناجمي — E‑Smart Market Pro AI</p>
+  </section>
+
+  <div class="footer">
+    © جميع الحقوق محفوظة لطارق ناجمي — E‑Smart Market Pro AI
+  </div>
+</div>
+
+<!-- Onboarding Modal -->
+<div class="modal" id="onboardingModal">
+  <div class="box">
+    <h2 style="color:var(--gold);margin:0 0 8px 0" data-i18n="welcome">مرحبًا بك في E‑Smart Home 👋</h2>
+    <ul class="hints">
+      <li data-i18n="tipBills">أضف فواتيرك من تبويب الفواتير.</li>
+      <li data-i18n="tipWallet">سجّل الدخل والمصاريف داخل المحفظة.</li>
+      <li data-i18n="tipFamily">أضف أفراد العائلة وصلاحياتهم.</li>
+      <li data-i18n="tipPantry">تابع المخزون وأنشئ لائحة مشتريات ذكية.</li>
+      <li data-i18n="tipReports">أنشئ التقارير وشاركها عبر واتساب.</li>
+    </ul>
+    <div class="row" style="justify-content:flex-end">
+      <button class="btn" id="closeOnboarding" data-i18n="ok">حسناً</button>
+    </div>
+  </div>
+</div>
+
+<!-- License & Payments Modal -->
+<div class="modal" id="licenseModal">
+  <div class="box">
+    <h2 style="color:var(--gold);margin:0 0 8px 0" data-i18n="licenseTitle">الترخيص مطلوب</h2>
+    <p class="muted">
+      <span data-i18n="trialEnded15">انتهت صلاحية التجربة المجانية (15 يومًا).</span>
+      <span data-i18n="choosePlan">اختر خطة أو أدخل السيريال كاي لتفعيل المنتج.</span>
+    </p>
+
+    <h3 style="color:var(--gold);margin:10px 0" data-i18n="subs">خطط الاشتراك</h3>
+    <div class="plans">
+      <div class="plan">
+        <h3 data-i18n="planMonthly">شهري</h3>
+        <p>99 MAD</p>
+        <div class="payrow">
+          <button class="paybtn" onclick="payPayPal('monthly',99,'اشتراك شهري')">
+            <!-- PayPal icon -->
+            <svg viewBox="0 0 24 24"><path fill="#009cde" d="M7 21l1.2-7H6l1.4-9H18a4 4 0 010 8h-4l-.6 4H10l-.5 4H7z"/></svg>
+            PayPal
+          </button>
+          <button class="paybtn" onclick="payGoogle(99,'Monthly Subscription')">
+            <!-- GPay -->
+            <svg viewBox="0 0 24 24"><path fill="#fff" d="M12 2a10 10 0 100 20 10 10 0 000-20z"/><path fill="#4285F4" d="M12 5v4l3.5-2z"/></svg>
+            Google Pay
+          </button>
+          <button class="paybtn" onclick="payCIH('monthly',99)">
+            <!-- CIH Pay -->
+            <svg viewBox="0 0 24 24"><rect x="2" y="6" width="20" height="12" rx="2" fill="#00A3E0"/><path d="M4 9h8v2H4z" fill="#fff"/></svg>
+            CIH Pay
+          </button>
+          <button class="paybtn" onclick="payCMI('monthly',99)">
+            <!-- CMI -->
+            <svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2" fill="#1a73e8"/><circle cx="9" cy="12" r="2" fill="#fff"/></svg>
+            CMI
+          </button>
+        </div>
+        <div class="row"><button class="btn primary" id="btnPlanMonthly" data-plan="monthly" data-i18n="choose">اختيار</button></div>
+      </div>
+
+      <div class="plan">
+        <h3 data-i18n="planYearly">سنوي</h3>
+        <p>999 MAD</p>
+        <div class="payrow">
+          <button class="paybtn" onclick="payPayPal('yearly',999,'اشتراك سنوي')"><svg viewBox="0 0 24 24"><path fill="#009cde" d="M7 21l1.2-7H6l1.4-9H18a4 4 0 010 8h-4l-.6 4H10l-.5 4H7z"/></svg>PayPal</button>
+          <button class="paybtn" onclick="payGoogle(999,'Yearly Subscription')"><svg viewBox="0 0 24 24"><path fill="#fff" d="M12 2a10 10 0 100 20 10 10 0 000-20z"/><path fill="#4285F4" d="M12 5v4l3.5-2z"/></svg>Google Pay</button>
+          <button class="paybtn" onclick="payCIH('yearly',999)"><svg viewBox="0 0 24 24"><rect x="2" y="6" width="20" height="12" rx="2" fill="#00A3E0"/><path d="M4 9h8v2H4z" fill="#fff"/></svg>CIH Pay</button>
+          <button class="paybtn" onclick="payCMI('yearly',999)"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2" fill="#1a73e8"/><circle cx="9" cy="12" r="2" fill="#fff"/></svg>CMI</button>
+        </div>
+        <div class="row"><button class="btn primary" id="btnPlanYearly" data-plan="yearly" data-i18n="choose">اختيار</button></div>
+      </div>
+
+      <div class="plan">
+        <h3 data-i18n="plan4y">عقد 4 سنوات</h3>
+        <p>3999 MAD</p>
+        <div class="payrow">
+          <button class="paybtn" onclick="payPayPal('4years',3999,'اشتراك 4 سنوات')"><svg viewBox="0 0 24 24"><path fill="#009cde" d="M7 21l1.2-7H6l1.4-9H18a4 4 0 010 8h-4l-.6 4H10l-.5 4H7z"/></svg>PayPal</button>
+          <button class="paybtn" onclick="payGoogle(3999,'4 Years Subscription')"><svg viewBox="0 0 24 24"><path fill="#fff" d="M12 2a10 10 0 100 20 10 10 0 000-20z"/><path fill="#4285F4" d="M12 5v4l3.5-2z"/></svg>Google Pay</button>
+          <button class="paybtn" onclick="payCIH('4years',3999)"><svg viewBox="0 0 24 24"><rect x="2" y="6" width="20" height="12" rx="2" fill="#00A3E0"/><path d="M4 9h8v2H4z" fill="#fff"/></svg>CIH Pay</button>
+          <button class="paybtn" onclick="payCMI('4years',3999)"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2" fill="#1a73e8"/><circle cx="9" cy="12" r="2" fill="#fff"/></svg>CMI</button>
+        </div>
+        <div class="row"><button class="btn primary" id="btnPlan4y" data-plan="4years" data-i18n="choose">اختيار</button></div>
+      </div>
+    </div>
+
+    <div class="sep"></div>
+
+    <h3 style="color:var(--gold);margin:10px 0" data-i18n="lifetime">رخصة مدى الحياة</h3>
+    <div class="plans">
+      <div class="plan">
+        <h3 data-i18n="lifeBasic">أساسي (أسرة واحدة)</h3>
+        <p>8999 MAD</p>
+        <div class="payrow">
+          <button class="paybtn" onclick="payPayPal('lifetime-basic',8999,'مدى الحياة — أسرة واحدة')"><svg viewBox="0 0 24 24"><path fill="#009cde" d="M7 21l1.2-7H6l1.4-9H18a4 4 0 010 8h-4l-.6 4H10l-.5 4H7z"/></svg>PayPal</button>
+          <button class="paybtn" onclick="payGoogle(8999,'Lifetime Basic')"><svg viewBox="0 0 24 24"><path fill="#fff" d="M12 2a10 10 0 100 20 10 10 0 000-20z"/><path fill="#4285F4" d="M12 5v4l3.5-2z"/></svg>Google Pay</button>
+          <button class="paybtn" onclick="payCIH('lifetime-basic',8999)"><svg viewBox="0 0 24 24"><rect x="2" y="6" width="20" height="12" rx="2" fill="#00A3E0"/><path d="M4 9h8v2H4z" fill="#fff"/></svg>CIH Pay</button>
+          <button class="paybtn" onclick="payCMI('lifetime-basic',8999)"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2" fill="#1a73e8"/><circle cx="9" cy="12" r="2" fill="#fff"/></svg>CMI</button>
+        </div>
+        <div class="row"><button class="btn primary" id="btnPlanLifeBasic" data-plan="lifetime-basic" data-i18n="choose">اختيار</button></div>
+      </div>
+
+      <div class="plan">
+        <h3 data-i18n="lifeSocial">اجتماعي (3 أسر)</h3>
+        <p>14999 MAD</p>
+        <div class="payrow">
+          <button class="paybtn" onclick="payPayPal('lifetime-social',14999,'مدى الحياة — 3 أسر')"><svg viewBox="0 0 24 24"><path fill="#009cde" d="M7 21l1.2-7H6l1.4-9H18a4 4 0 010 8h-4l-.6 4H10l-.5 4H7z"/></svg>PayPal</button>
+          <button class="paybtn" onclick="payGoogle(14999,'Lifetime Social')"><svg viewBox="0 0 24 24"><path fill="#fff" d="M12 2a10 10 0 100 20 10 10 0 000-20z"/><path fill="#4285F4" d="M12 5v4l3.5-2z"/></svg>Google Pay</button>
+          <button class="paybtn" onclick="payCIH('lifetime-social',14999)"><svg viewBox="0 0 24 24"><rect x="2" y="6" width="20" height="12" rx="2" fill="#00A3E0"/><path d="M4 9h8v2H4z" fill="#fff"/></svg>CIH Pay</button>
+          <button class="paybtn" onclick="payCMI('lifetime-social',14999)"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2" fill="#1a73e8"/><circle cx="9" cy="12" r="2" fill="#fff"/></svg>CMI</button>
+        </div>
+        <div class="row"><button class="btn primary" id="btnPlanLifeSocial" data-plan="lifetime-social" data-i18n="choose">اختيار</button></div>
+      </div>
+
+      <div class="plan">
+        <h3 data-i18n="lifeBiz">شركات/مستثمرون (تجاري)</h3>
+        <p data-i18n="contactUs">يرجى التواصل للتفاوض والتعاقد</p>
+        <div class="payrow">
+          <a class="paybtn" href="mailto:najemitarek@gmail.com?subject=ESM%20Pro%20AI%20Commercial%20License" target="_blank">
+            <!-- Mail -->
+            <svg viewBox="0 0 24 24"><path fill="#fff" d="M20 4H4a2 2 0 00-2 2v12a2 2 0 002 2h16a2 2 0 002-2V6a2 2 0 00-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
+            Email
+          </a>
+          <a class="paybtn" href="https://wa.me/212?text=License%20Commercial%20E‑Smart%20Market%20Pro%20AI" target="_blank">
+            <!-- WhatsApp -->
+            <svg viewBox="0 0 24 24"><path fill="#25D366" d="M20.5 3.5A11.8 11.8 0 0012 1 11 11 0 001 12a10.9 10.9 0 001.6 5.8L1 23l5.4-1.6A11.1 11.1 0 0012 23a11 11 0 0011-11 10.8 10.8 0 00-2.5-8.5z"/></svg>
+            WhatsApp
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <div class="sep"></div>
+
+    <div class="row">
+      <input id="licenseKey" placeholder="ESM-XXXX-XXXX-XXXX" style="flex:1" data-i18n-placeholder="phSerial">
+      <button class="btn" id="activateKey" data-i18n="activate">تفعيل</button>
+    </div>
+    <p class="notice" data-i18n="licenseNote">ملاحظة: هذا تفعيل محلي للتجربة. في الإنتاج يتم التحقق عبر الخادم.</p>
+  </div>
+</div>
+
+<!-- Smart Assistant -->
+<div class="assistant" id="assistant">
+  <div class="assistant-header">
+    <div data-i18n="assistantTitle">🤖 مساعد البيت الذكي</div>
+    <button class="btn ghost" id="toggleAssistant">✕</button>
+  </div>
+  <div class="assistant-body" id="chat"></div>
+  <div class="assistant-input">
+    <input id="ask" placeholder="اسأل: كم صرفنا هذا الشهر؟" data-i18n-placeholder="phAsk">
+    <button class="btn primary" id="askBtn" data-i18n="send">إرسال</button>
+  </div>
+</div>
+
+<script>
+/* ================= i18n strings ================= */
+const I18N = {
+  ar:{appTitle:"E‑Smart Home — إدارة البيت",install:"⬇️ تثبيت التطبيق",help:"❓ إرشادات سريعة",shareSummary:"📤 مشاركة ملخص",
+      dashboard:"اللوحة",bills:"الفواتير",pantry:"المطبخ",calendar:"الرزنامة",wallet:"المحفظة",reports:"التقارير",family:"العائلة",
+      quickSummary:"ملخص سريع",kpiBills:"الفواتير هذا الأسبوع",kpiLow:"نقص المخزون",kpiEvent:"حدث قريب",kpiBalance:"الرصيد الحالي",
+      autoUpdate:"تُحدّث المؤشرات والرسوم تلقائيًا مع كل إضافة.",
+      provider:"المزوّد",amount:"المبلغ",due:"الاستحقاق",status:"الحالة",pending:"مستحقة",paid:"مدفوعة",overdue:"متأخرة",
+      shareWhatsApp:"📤 مشاركة عبر واتساب",printPdf:"📄 طباعة/حفظ PDF",
+      smartList:"🛒 لائحة ذكية",
+      title:"العنوان",date:"التاريخ",type:"النوع",exam:"امتحان",bill:"فاتورة",birthday:"عيد ميلاد",other:"أخرى",
+      income:"دخل",expense:"مصروف",salary:"راتب",groceries:"مطبخ",education:"تعليم",social:"مناسبات",
+      sumIncome:"💵 مجموع الدخل",sumExpense:"💸 مجموع المصاريف",balance:"🟢 الرصيد",kind:"النوع",desc:"الوصف",category:"الفئة",
+      reportBills:"📄 تقرير الفواتير",reportPantry:"📄 تقرير المخزون",reportEvents:"📄 تقرير الرزنامة",reportShopping:"📄 لائحة المشتريات",
+      waBills:"📤 واتساب الفواتير",waPantry:"📤 واتساب المخزون",waEvents:"📤 واتساب الرزنامة",waShopping:"📤 واتساب اللائحة",
+      welcome:"مرحبًا بك في E‑Smart Home 👋",tipBills:"أضف فواتيرك من تبويب الفواتير.",tipWallet:"سجّل الدخل والمصاريف داخل المحفظة.",
+      tipFamily:"أضف أفراد العائلة وصلاحياتهم.",tipPantry:"تابع المخزون وأنشئ لائحة مشتريات ذكية.",tipReports:"أنشئ التقارير وشاركها عبر واتساب.",ok:"حسناً",
+      licenseTitle:"الترخيص مطلوب",trialEnded15:"انتهت صلاحية التجربة المجانية (15 يومًا).",choosePlan:"اختر خطة أو أدخل السيريال كاي لتفعيل المنتج.",
+      subs:"خطط الاشتراك",planMonthly:"شهري",planYearly:"سنوي",plan4y:"عقد 4 سنوات",lifetime:"رخصة مدى الحياة",
+      lifeBasic:"أساسي (أسرة واحدة)",lifeSocial:"اجتماعي (3 أسر)",lifeBiz:"شركات/مستثمرون (تجاري)",contactUs:"يرجى التواصل للتفاوض والتعاقد",
+      choose:"اختيار",activate:"تفعيل",licenseNote:"ملاحظة: هذا تفعيل محلي للتجربة. في الإنتاج يتم التحقق عبر الخادم.",
+      assistantTitle:"🤖 مساعد البيت الذكي",send:"إرسال",
+      phProvider:"المزوّد (ONE)",phAmount:"المبلغ (MAD)",phItem:"الصنف (زيت)",phQty:"الكمية",phReorder:"حد إعادة الطلب",
+      phEventTitle:"عنوان الحدث (امتحان)",phTxnTitle:"الوصف (راتب/تسوق)",phYourName:"اسمك",phYourEmail:"بريدك",
+      phFamName:"اسم فرد الأسرة",phFamEmail:"بريده",phSerial:"ESM-XXXX-XXXX-XXXX",phAsk:"اسأل: كم صرفنا هذا الشهر؟",
+      add:"➕ إضافة",delete:"حذف",login:"تسجيل الدخول",roleAdmin:"مسؤول (أب/أم/ولي)",roleMember:"فرد",roleGuest:"ضيف"
+  },
+  fr:{appTitle:"E‑Smart Home — Gestion du foyer",install:"⬇️ Installer l'app",help:"❓ Aide rapide",shareSummary:"📤 Partager le résumé",
+      dashboard:"Tableau",bills:"Factures",pantry:"Cuisine",calendar:"Calendrier",wallet:"Portefeuille",reports:"Rapports",family:"Famille",
+      quickSummary:"Résumé rapide",kpiBills:"Factures cette semaine",kpiLow:"Stock faible",kpiEvent:"Événement proche",kpiBalance:"Solde actuel",
+      autoUpdate:"Les indicateurs et graphiques se mettent à jour automatiquement.",
+      provider:"Fournisseur",amount:"Montant",due:"Échéance",status:"Statut",pending:"En attente",paid:"Payée",overdue:"En retard",
+      shareWhatsApp:"📤 Partager via WhatsApp",printPdf:"📄 Imprimer/Enregistrer PDF",
+      smartList:"🛒 Liste intelligente",
+      title:"Titre",date:"Date",type:"Type",exam:"Examen",bill:"Facture",birthday:"Anniversaire",other:"Autre",
+      income:"Revenu",expense:"Dépense",salary:"Salaire",groceries:"Épicerie",education:"Éducation",social:"Social",
+      sumIncome:"💵 Revenu total",sumExpense:"💸 Dépenses totales",balance:"🟢 Solde",kind:"Type",desc:"Description",category:"Catégorie",
+      reportBills:"📄 Rapport des factures",reportPantry:"📄 Rapport du stock",reportEvents:"📄 Rapport du calendrier",reportShopping:"📄 Liste d’achats",
+      waBills:"📤 WhatsApp Factures",waPantry:"📤 WhatsApp Stock",waEvents:"📤 WhatsApp Calendrier",waShopping:"📤 WhatsApp Achats",
+      welcome:"Bienvenue sur E‑Smart Home 👋",tipBills:"Ajoutez vos factures.",tipWallet:"Enregistrez revenus/dépenses.",
+      tipFamily:"Ajoutez les membres et leurs droits.",tipPantry:"Suivez le stock et créez une liste d’achats.",tipReports:"Générez et partagez des rapports.",ok:"OK",
+      licenseTitle:"Licence requise",trialEnded15:"Période d’essai de 15 jours expirée.",choosePlan:"Choisissez un plan ou entrez une clé.",
+      subs:"Abonnements",planMonthly:"Mensuel",planYearly:"Annuel",plan4y:"Contrat 4 ans",lifetime:"Licence à vie",
+      lifeBasic:"Basique (1 famille)",lifeSocial:"Social (3 familles)",lifeBiz:"Entreprises/Investisseurs (Commercial)",contactUs:"Contactez‑nous pour négocier.",
+      choose:"Choisir",activate:"Activer",licenseNote:"Note: activation locale en démo. En prod: vérification serveur.",
+      assistantTitle:"🤖 Assistant du foyer",send:"Envoyer",
+      phProvider:"Fournisseur (ONE)",phAmount:"Montant (MAD)",phItem:"Article (Huile)",phQty:"Quantité",phReorder:"Seuil de réappro.",
+      phEventTitle:"Titre (Examen)",phTxnTitle:"Description (Salaire/Achats)",phYourName:"Votre nom",phYourEmail:"Votre e-mail",
+      phFamName:"Nom du membre",phFamEmail:"E-mail du membre",phSerial:"ESM-XXXX-XXXX-XXXX",phAsk:"Dépenses du mois ?",
+      add:"➕ Ajouter",delete:"Supprimer",login:"Se connecter",roleAdmin:"Admin (parent/tuteur)",roleMember:"Membre",roleGuest:"Invité"
+  },
+  en:{appTitle:"E‑Smart Home — Household Manager",install:"⬇️ Install app",help:"❓ Quick help",shareSummary:"📤 Share summary",
+      dashboard:"Dashboard",bills:"Bills",pantry:"Pantry",calendar:"Calendar",wallet:"Wallet",reports:"Reports",family:"Family",
+      quickSummary:"Quick summary",kpiBills:"Bills this week",kpiLow:"Low stock",kpiEvent:"Upcoming event",kpiBalance:"Current balance",
+      autoUpdate:"Indicators and charts update automatically.",
+      provider:"Provider",amount:"Amount",due:"Due date",status:"Status",pending:"Pending",paid:"Paid",overdue:"Overdue",
+      shareWhatsApp:"📤 Share via WhatsApp",printPdf:"📄 Print/Save PDF",
+      smartList:"🛒 Smart list",
+      title:"Title",date:"Date",type:"Type",exam:"Exam",bill:"Bill",birthday:"Birthday",other:"Other",
+      income:"Income",expense:"Expense",salary:"Salary",groceries:"Groceries",education:"Education",social:"Social",
+      sumIncome:"💵 Total income",sumExpense:"💸 Total expenses",balance:"🟢 Balance",kind:"Kind",desc:"Description",category:"Category",
+      reportBills:"📄 Bills report",reportPantry:"📄 Pantry report",reportEvents:"📄 Calendar report",reportShopping:"📄 Shopping list",
+      waBills:"📤 WhatsApp Bills",waPantry:"📤 WhatsApp Pantry",waEvents:"📤 WhatsApp Calendar",waShopping:"📤 WhatsApp Shopping",
+      welcome:"Welcome to E‑Smart Home 👋",tipBills:"Add your bills.",tipWallet:"Record income/expenses.",
+      tipFamily:"Add family members & permissions.",tipPantry:"Track stock & create a smart shopping list.",tipReports:"Generate and share reports.",ok:"OK",
+      licenseTitle:"License required",trialEnded15:"15‑day free trial has ended.",choosePlan:"Choose a plan or enter a serial key.",
+      subs:"Subscriptions",planMonthly:"Monthly",planYearly:"Yearly",plan4y:"4‑Year Contract",lifetime:"Lifetime license",
+      lifeBasic:"Basic (1 family)",lifeSocial:"Social (3 families)",lifeBiz:"Businesses/Investors (Commercial)",contactUs:"Contact us to negotiate.",
+      choose:"Choose",activate:"Activate",licenseNote:"Note: local activation in demo. In production, verify on server.",
+      assistantTitle:"🤖 Smart home assistant",send:"Send",
+      phProvider:"Provider (ONE)",phAmount:"Amount (MAD)",phItem:"Item (Oil)",phQty:"Quantity",phReorder:"Reorder threshold",
+      phEventTitle:"Event title (Exam)",phTxnTitle:"Description (Salary/Shopping)",phYourName:"Your name",phYourEmail:"Your email",
+      phFamName:"Member name",phFamEmail:"Member email",phSerial:"ESM-XXXX-XXXX-XXXX",phAsk:"Ask: how much spent this month?",
+      add:"➕ Add",delete:"Delete",login:"Log in",roleAdmin:"Admin (parent/guardian)",roleMember:"Member",roleGuest:"Guest"
+  },
+  zgh:{appTitle:"E‑Smart Home — ⵜⴰⵎⵙⵙⴰ ⵏ ⵍⴰⵢⵍⵉ",install:"⬇️ ⵜⴰⵙⵙⵓⵙⵜ",help:"❓ ⵜⵉⵙⵔⵉⵡⵉⵏ",shareSummary:"📤 ⵜⵙⵉⵙⵉ ⵏ ⵜⴰⵎⴰⵣⵉⵍⵜ",
+      dashboard:"ⴰⵙⵏⵓⵙ",bills:"ⴼⵓⵜⵉⵔⵉⵙ",pantry:"ⴰⵎⵓⵙⵙⵉ",calendar:"ⴰⵙⴰⵎⴰⵙ",wallet:"ⴰⵎⴰⵣⵉⵍ",reports:"ⵜⵉⵙⵉⵔⵉⵡⵉⵏ",family:"ⴰⵢⵢⴰⵏ",
+      quickSummary:"ⵜⴰⵎⴳⴳⴰⵔⵜ",kpiBills:"ⴼⵓⵜⵉⵔⵉⵙ ⵏ ⵜⴰⵎⵎⵓⴳⵜ",kpiLow:"ⵉⵎⴻⵔ ⵏ ⵜⵙⴽⵓⵍⵜ",kpiEvent:"ⴰⵙⵓⴳⴰⵎ ⵏ ⵓⵎⴰⴽⵓⵍ",kpiBalance:"ⴰⴳⴷⴰⵔ",
+      autoUpdate:"ⵜⵙⵏⵎⴰⵡⴰⵏ ⵜⵎⵉⵔⵔⵓⵙⵏ.",
+      provider:"ⴰⵖⴻⵍⴰⵢ",amount:"ⴰⵎⴰⵢⵢⴰⵔ",due:"ⴰⵙⵏⴰⵎ",status:"ⴰⵙⵏⵓⵙ",pending:"ⴰⵎⴰⵢⵢⴰⵔ",paid:"ⴰⵎⵓⵙⵙⵉ",overdue:"ⴰⵙⵏⴰⵎ",
+      shareWhatsApp:"📤 WhatsApp",printPdf:"📄 ⵜⵙⵎⵙⵉ/PDF",
+      smartList:"🛒 ⵜⵉⵍⵉⵙⵜ",
+      title:"ⴰⵙⵎⴰⵏ",date:"ⴰⵙⵙⵓⴽ",type:"ⴰⵢⵢⵓⵔ",exam:"ⴰⵙⵙⵓⵎ",bill:"ⴼⵓⵜⵉⵔⵜ",birthday:"ⴰⵙⵙⵓⵏ ⵏ ⵓⵎⴰⵍⵍⵉ",other:"ⵎⴰⵢⵢⴰⵔ",
+      income:"ⴰⵎⴰⵣⵉⵍ",expense:"ⴰⴷⴷⴰⵙ",salary:"ⴰⵙⴰⵍⴰⵏ",groceries:"ⴰⵎⵓⵙⵙⵉ",education:"ⵜⴰⵙⵙⵏⵉⵎⵜ",social:"ⴰⵎⵓⵔⵉ",
+      sumIncome:"💵 ⴰⴳⴷⴰⵔ ⵏ ⴰⵎⴰⵣⵉⵍ",sumExpense:"💸 ⴰⴳⴷⴰⵔ ⵏ ⴰⴷⴷⴰⵙ",balance:"🟢 ⴰⴳⴷⴰⵔ",kind:"ⴰⵢⵢⵓⵔ",desc:"ⴰⵙⵎⴰⵏ",category:"ⴰⵙⵙⵉⴷⵓ",
+      reportBills:"📄 ⵜⵉⵙⵉⵔⵉⵡⵉⵏ ⵏ ⴼⵓⵜⵉⵔⵉⵙ",reportPantry:"📄 ⵜⵉⵙⵉⵔⵉⵡⵉⵏ ⵏ ⵜⵙⴽⵓⵍⵜ",reportEvents:"📄 ⵜⵉⵙⵉⵔⵉⵡⵉⵏ ⵏ ⴰⵙⴰⵎⴰⵙ",reportShopping:"📄 ⵜⵉⵍⵉⵙⵜ",
+      waBills:"📤 WhatsApp ⴼⵓⵜⵉⵔⵉⵙ",waPantry:"📤 WhatsApp ⵜⵙⴽⵓⵍⵜ",waEvents:"📤 WhatsApp ⴰⵙⴰⵎⴰⵙ",waShopping:"📤 WhatsApp ⵜⵉⵍⵉⵙⵜ",
+      welcome:"ⵣⵓⵍ ⵣⵣⵓ E‑Smart Home 👋",tipBills:"ⵙⵏⵓ ⴼⵓⵜⵉⵔⵉⵙ.",tipWallet:"ⵙⵏⵓ ⴰⵎⴰⵣⵉⵍ/ⴰⴷⴷⴰⵙ.",tipFamily:"ⵙⵏⵓ ⴰⵢⵢⴰⵏ.",tipPantry:"ⵜⴰⴱⴰⵍⵜ ⵜⵙⴽⵓⵍⵜ.",tipReports:"ⵜⵙⵎⴰⵙⵜ ⵜⵉⵙⵉⵔⵉⵡⵉⵏ.",ok:"OK",
+      licenseTitle:"ⵜⵉⵍⵉⵙⵏⵙ ⵏ ⵜⵙⵙⵓⵙⵜ",trialEnded15:"ⵜⵉⵣⵔⵉ 15 ⵙⵙ.",choosePlan:"ⵙⵎⴰⵙ ⵜⵓⵙⵎⵉⵔⵜ ⴰⴷ ⵙⴻⵙⴻⵎ ⵙⵉⵔⵉⴰⵍ.",
+      subs:"ⵜⵓⵙⵎⵉⵔⵜ",planMonthly:"ⴰⵎⴰⵢ",planYearly:"ⴰⵎⴰⵙⵉ",plan4y:"4 ⵙⵙ",lifetime:"ⵜⵉⵍⵉⵙⵏⵙ ⵏ ⵜⴰⵎⵣⵉⵍⵜ",
+      lifeBasic:"ⴰⵣⴰⵍ (1 ⴰⵢⵢⴰⵏ)",lifeSocial:"ⴰⵣⴰⵍ (3 ⴰⵢⵢⴰⵏ)",lifeBiz:"ⵜⴰⵎⵓⵔⵉⵡⵉⵜ (ⵎⵉⵏⴰⵡⴰⵙⵏ)",contactUs:"ⵎⴰⵍⵍ ⵏⵏⴻⵙ ɣ ⵡⴰⵙⴰⵙⵓⵎ.",
+      choose:"ⵙⵎⴰⵙ",activate:"ⵙⴻⵎⵎⴻⵎ",licenseNote:"ⴰⵎⵔⵉⵖ: ⵉⵍⵍⴰ ⵙ ⵓⵎⵔⵔⵉⴳ.",
+      assistantTitle:"🤖 ⴰⵙⵙⵓⵙⵜ ⵏ ⵜⴰⵎⵙⵙⴰ",send:"ⴳⵔⴰ",
+      phProvider:"ⴰⵖⴻⵍⴰⵢ",phAmount:"MAD",phItem:"ⴰⵎⵉⵏⴳ",phQty:"ⴰⵙⵎⴽⵓⴷ",phReorder:"ⴰⵙⴰⵎⵓⵔ",
+      phEventTitle:"ⴰⵙⵎⴰⵏ",phTxnTitle:"ⴰⵙⵎⴰⵏ",phYourName:"ⵎⴰⵢⵉⴹ",phYourEmail:"ⴰⴷⵉⵎⴰⵍ",
+      phFamName:"ⴰⵙⵎⴰⵏ ⵏ ⴰⵢⵢⴰⵏ",phFamEmail:"ⴰⴷⵉⵎⴰⵍ",phSerial:"ESM-XXXX-XXXX-XXXX",phAsk:"ⴰⵣⵎⵎⵓⵔ…",
+      add:"➕ ⵔⵔⴰⵔ",delete:"ⴽⵔⴰ",login:"ⴰⵙⵎⵎⴰⵔ",roleAdmin:"ⴰⵎⴰⵣⵉⵍ",roleMember:"ⴰⵢⵢⴰⵏ",roleGuest:"ⴰⵣⵓⵏ"
+  }
+};
+let LANG = localStorage.getItem('esm_lang') || 'ar';
+const $ = s=>document.querySelector(s);
+function applyI18n(){
+  document.documentElement.lang = LANG;
+  document.documentElement.dir = (LANG==='ar'||LANG==='zgh')?'rtl':'ltr';
+  document.querySelectorAll('[data-i18n]').forEach(el=>{
+    const key = el.getAttribute('data-i18n');
+    if (I18N[LANG][key]) el.textContent = I18N[LANG][key];
+  });
+  document.querySelectorAll('[data-i18n-placeholder]').forEach(el=>{
+    const key = el.getAttribute('data-i18n-placeholder');
+    if (I18N[LANG][key]) el.setAttribute('placeholder', I18N[LANG][key]);
+  });
+}
+$('#langSel').value = LANG;
+$('#langSel').addEventListener('change', e=>{
+  LANG = e.target.value; localStorage.setItem('esm_lang', LANG); applyI18n(); renderCharts(); renderWallet(); renderEvents(); renderBills(); renderPantry();
+});
+
+/* ================= State & Trial/License (15 days) ================= */
+const PAYPAL_EMAIL = 'najemitarek@gmail.com';
+const CIH_PAY_URLS = { // ضع روابط دفع CIH الفعلية هنا عند تفعيل التاجر
+  monthly:'', yearly:'', '4years':'', 'lifetime-basic':'', 'lifetime-social':''
+};
+const CMI_URLS = { // ضع روابط صفحة الدفع CMI هنا
+  monthly:'', yearly:'', '4years':'', 'lifetime-basic':'', 'lifetime-social':''
+};
+
+const S = {
+  user: JSON.parse(localStorage.getItem('esm_user') || 'null'),
+  family: JSON.parse(localStorage.getItem('esm_family') || '[]'),
+  bills: JSON.parse(localStorage.getItem('esm_bills') || '[]'),
+  pantry: JSON.parse(localStorage.getItem('esm_pantry') || '[]'),
+  events: JSON.parse(localStorage.getItem('esm_events') || '[]'),
+  wallet: JSON.parse(localStorage.getItem('esm_wallet') || '[]'),
+  firstUse: localStorage.getItem('esm_firstUse') || null,
+  license: JSON.parse(localStorage.getItem('esm_license') || 'null')
+};
+if(!S.firstUse){ S.firstUse = new Date().toISOString(); localStorage.setItem('esm_firstUse', S.firstUse); }
+function daysSince(d){ return Math.floor((Date.now() - new Date(d).getTime()) / 86400000); }
+function licenseValid(){
+  if (!S.license) return false;
+  if (S.license.plan && S.license.plan.startsWith('lifetime')) return true;
+  if (S.license.expiresAt && new Date(S.license.expiresAt) > new Date()) return true;
+  return false;
+}
+function trialActive(){ return daysSince(S.firstUse) < 15 || licenseValid(); }
+function requireLicense(){
+  if (!trialActive()){
+    $('#licenseModal').style.display='flex';
+    return false;
+  }
+  return true;
+}
+document.addEventListener('click', e=>{
+  if (e.target.classList.contains('requires-license')){
+    if (!requireLicense()) e.preventDefault();
+  }
+});
+
+/* ================= Payments: PayPal / Google Pay / CIH Pay / CMI ================= */
+function payPayPal(plan, amount, itemName){
+  // PayPal "Buy Now" GET link (demo). PayPal قد يحوّل العملة تلقائيًا.
+  const params = new URLSearchParams({
+    cmd: '_xclick',
+    business: PAYPAL_EMAIL,
+    item_name: itemName,
+    amount: amount,
+    currency_code: 'MAD',
+    no_shipping: '1'
+  });
+  window.open('https://www.paypal.com/cgi-bin/webscr?'+params.toString(), '_blank');
+}
+async function payGoogle(amount, label){
+  try{
+    if (!window.PaymentRequest) throw new Error('Payment Request not supported');
+    const supported = [{supportedMethods:'https://google.com/pay'},{supportedMethods:'basic-card'}];
+    const details = { total:{ label, amount:{ currency:'MAD', value: String(amount) } } };
+    const request = new PaymentRequest(supported, details);
+    const resp = await request.show();
+    await resp.complete('success');
+    alert('تم الدفع عبر Google Pay (تجريبي) ✔️');
+  }catch(e){
+    alert('تعذر استخدام Google Pay على هذا المتصفح. جرّب PayPal/CIH/CMI.');
+  }
+}
+function payCIH(plan, amount){
+  const url = CIH_PAY_URLS[plan] || '';
+  if (!url){ alert('CIH Pay: فعل رابط التاجر أولًا.'); return; }
+  window.open(url, '_blank');
+}
+function payCMI(plan, amount){
+  const url = CMI_URLS[plan] || '';
+  if (!url){ alert('CMI: فعل بوابة الدفع أولًا.'); return; }
+  window.open(url, '_blank');
+}
+
+/* تفعيل الخطة محليًا (اختيار) */
+['btnPlanMonthly','btnPlanYearly','btnPlan4y','btnPlanLifeBasic','btnPlanLifeSocial'].forEach(id=>{
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.addEventListener('click', ()=>{
+    const now = new Date(); let plan=el.dataset.plan||'';
+    let expires=null;
+    if (plan==='monthly'){ const dt=new Date(now); dt.setMonth(dt.getMonth()+1); expires=dt.toISOString(); }
+    if (plan==='yearly'){ const dt=new Date(now); dt.setFullYear(dt.getFullYear()+1); expires=dt.toISOString(); }
+    if (plan==='4years'){ const dt=new Date(now); dt.setFullYear(dt.getFullYear()+4); expires=dt.toISOString(); }
+    if (plan==='lifetime-basic' || plan==='lifetime-social'){ expires=null; }
+    S.license = {plan, activatedAt: now.toISOString(), expiresAt: expires};
+    localStorage.setItem('esm_license', JSON.stringify(S.license));
+    alert('✅ تم تفعيل الخطة: '+plan);
+    $('#licenseModal').style.display='none';
+  });
+});
+$('#activateKey').addEventListener('click', ()=>{
+  const key = $('#licenseKey').value.trim();
+  const re = /^ESM-[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{4}$/;
+  if (!re.test(key)) { alert('Serial format: ESM-XXXX-XXXX-XXXX'); return; }
+  S.license = {plan:'lifetime-basic', key, activatedAt: new Date().toISOString(), expiresAt: null};
+  localStorage.setItem('esm_license', JSON.stringify(S.license));
+  alert('Activated ✅'); $('#licenseModal').style.display='none';
+});
+
+/* ================= PWA (minimal inline) ================= */
+(function setupPWA(){
+  const manifest = {name:I18N[LANG].appTitle,short_name:"ESM Home",display:"standalone",start_url:"./?pwa=1",background_color:"#0B0B0B",theme_color:"#D4AF37",lang:LANG,dir:(LANG==='ar'||LANG==='zgh')?'rtl':'ltr',icons:[]};
+  const blob=new Blob([JSON.stringify(manifest)],{type:'application/manifest+json'});
+  const url=URL.createObjectURL(blob);
+  const link=document.createElement('link'); link.rel='manifest'; link.href=url; document.head.appendChild(link);
+  if('serviceWorker' in navigator){
+    const swCode = `const C='esm-lic-i18n-v1';const A=['./','./?pwa=1'];self.addEventListener('install',e=>e.waitUntil(caches.open(C).then(c=>c.addAll(A))));self.addEventListener('activate',e=>e.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(k=>k!==C).map(k=>caches.delete(k))))));self.addEventListener('fetch',e=>e.respondWith(fetch(e.request).catch(()=>caches.match(e.request))));`;
+    const swBlob=new Blob([swCode],{type:'text/javascript'}); const swUrl=URL.createObjectURL(swBlob); navigator.serviceWorker.register(swUrl);
+  }
+  let deferredPrompt=null;
+  window.addEventListener('beforeinstallprompt',(e)=>{e.preventDefault(); deferredPrompt=e;});
+  $('#installBtn').onclick=async ()=>{
+    if(!deferredPrompt){ alert('PWA يحتاج HTTPS وManifest.'); return; }
+    deferredPrompt.prompt(); const {outcome}=await deferredPrompt.userChoice;
+    if(outcome==='accepted') $('#installBtn').textContent='✅ تم التثبيت'; deferredPrompt=null;
+  };
+})();
+
+/* ================= Helpers ================= */
+function money(n){return (Number(n)||0).toFixed(2)+' MAD'}
+function waShare(text){window.open('https://wa.me/?text='+encodeURIComponent(text),'_blank')}
+function printSection(id){
+  const sec = document.getElementById(id); if(!sec) return;
+  const orig = document.body.innerHTML;
+  document.body.innerHTML = sec.outerHTML;
+  window.print(); document.body.innerHTML = orig; location.reload();
+}
+document.querySelectorAll('.tab').forEach(btn=>{
+  btn.onclick=()=>{document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active')); btn.classList.add('active'); document.querySelectorAll('section.panel').forEach(sec=>sec.style.display='none'); document.getElementById(btn.dataset.tab).style.display='block';};
+});
+
+/* ================= Data & seed ================= */
+const billsTbody = document.querySelector('#billsTable tbody');
+const pantryGrid = document.getElementById('pantryGrid');
+const eventsTbody = document.querySelector('#eventsTable tbody');
+const walletTbody = document.getElementById('walletTable tbody');
+if(!localStorage.getItem('esm_seed_pay')){
+  const today = new Date(); const d=n=>new Date(today.getTime()+n*86400000).toISOString().slice(0,10);
+  S.bills = [
+    {id:crypto.randomUUID(),provider:'ONE',amount:120,due:d(3),status:'pending'},
+    {id:crypto.randomUUID(),provider:'RAK Water',amount:80,due:d(6),status:'pending'},
+    {id:crypto.randomUUID(),provider:'Maroc Telecom',amount:199,due:d(-1),status:'pending'}
+  ];
+  S.pantry = [
+    {id:crypto.randomUUID(),name:'زيت',qty:1.2,unit:'l',reorder:1.5},
+    {id:crypto.randomUUID(),name:'سكر',qty:0.5,unit:'kg',reorder:1},
+    {id:crypto.randomUUID(),name:'دقيق',qty:2,unit:'kg',reorder:1}
+  ];
+  S.events = [
+    {id:crypto.randomUUID(),title:'امتحان رياضيات',date:d(2),type:'exam'},
+    {id:crypto.randomUUID(),title:'فاتورة كهرباء',date:d(5),type:'bill'}
+  ];
+  S.wallet = [
+    {id:crypto.randomUUID(),type:'income',title:'راتب',category:'salary',date:d(-15),amount:5000},
+    {id:crypto.randomUUID(),type:'expense',title:'مشتريات مطبخ',category:'groceries',date:d(-3),amount:600},
+    {id:crypto.randomUUID(),type:'expense',title:'فاتورة إنترنت',category:'bills',date:d(-2),amount:199},
+    {id:crypto.randomUUID(),type:'expense',title:'كتب دراسية',category:'education',date:d(-1),amount:300}
+  ];
+  localStorage.setItem('esm_seed_pay','1'); persist();
+}
+
+/* ================= Persist & render ================= */
+function persist(){
+  localStorage.setItem('esm_user', JSON.stringify(S.user));
+  localStorage.setItem('esm_family', JSON.stringify(S.family));
+  localStorage.setItem('esm_bills', JSON.stringify(S.bills));
+  localStorage.setItem('esm_pantry', JSON.stringify(S.pantry));
+  localStorage.setItem('esm_events', JSON.stringify(S.events));
+  localStorage.setItem('esm_wallet', JSON.stringify(S.wallet));
+  renderAll();
+}
+function renderAll(){ renderBills(); renderPantry(); renderEvents(); renderWallet(); renderKPIs(); renderCharts(); renderFamily(); }
+
+/* ================= Bills ================= */
+document.getElementById('addBill').onclick = ()=>{
+  if(!requireLicense()) return;
+  const provider = document.getElementById('billProvider').value.trim();
+  const amount = parseFloat(document.getElementById('billAmount').value||'0');
+  const due = document.getElementById('billDue').value;
+  const status = document.getElementById('billStatus').value;
+  if(!provider || !due) return alert('أكمل البيانات / Complete fields');
+  S.bills.push({id:crypto.randomUUID(),provider,amount,due,status});
+  document.getElementById('billProvider').value=''; document.getElementById('billAmount').value=''; document.getElementById('billDue').value='';
+  persist();
+};
+function renderBills(){
+  billsTbody.innerHTML='';
+  S.bills.sort((a,b)=>a.due.localeCompare(b.due)).forEach(b=>{
+    const tr=document.createElement('tr');
+    const cls=b.status==='paid'?'paid':(new Date(b.due)<new Date()?'overdue':'pending');
+    tr.innerHTML=`<td>${b.provider}</td><td>${money(b.amount)}</td><td>${b.due}</td><td><span class="badge ${cls}">${I18N[LANG][b.status]}</span></td>
+    <td><button class="btn ghost del-bill" data-id="${b.id}">${I18N[LANG].delete}</button></td>`;
+    billsTbody.appendChild(tr);
+  });
+}
+billsTbody.addEventListener('click',e=>{
+  if(e.target.classList.contains('del-bill')){
+    if(!requireLicense()) return;
+    if(!S.user || S.user.role!=='admin'){ alert('Admin only'); return; }
+    S.bills = S.bills.filter(x=>x.id!==e.target.dataset.id); persist();
+  }
+});
+function summarizeBills(){
+  const c=S.bills.length; const t=S.bills.reduce((a,b)=>a+(+b.amount||0),0);
+  const pend=S.bills.filter(b=>b.status!=='paid').length;
+  return `${I18N[LANG].bills}: ${c} | ${I18N[LANG].amount}: ${t.toFixed(2)} MAD | ${I18N[LANG].pending}: ${pend}`;
+}
+document.getElementById('shareBills').onclick=()=> waShare(summarizeBills());
+
+/* ================= Pantry ================= */
+document.getElementById('addItem').onclick=()=>{
+  if(!requireLicense()) return;
+  const name=document.getElementById('itemName').value.trim();
+  const qty=parseFloat(document.getElementById('itemQty').value||'0');
+  const unit=document.getElementById('itemUnit').value;
+  const reorder=parseFloat(document.getElementById('itemReorder').value||'0');
+  if(!name) return alert('أدخل اسم الصنف / Enter item');
+  S.pantry.push({id:crypto.randomUUID(),name,qty,unit,reorder});
+  document.getElementById('itemName').value=''; document.getElementById('itemQty').value=''; document.getElementById('itemReorder').value='';
+  persist();
+};
+function renderPantry(){
+  pantryGrid.innerHTML = '';
+  S.pantry.forEach(i => {
+    const ratio = i.reorder > 0 ? i.qty / i.reorder : 2;
+    const color = ratio <= 1 
+      ? 'var(--danger)' 
+      : (ratio <= 1.5 
+        ? 'var(--warn)' 
+        : 'var(--green)');
+    
+    const div = document.createElement('div');
+    div.className = 'card';
+    div.innerHTML = `
+      <div style="display:flex;justify-content:space-between;align-items:center">
+        <strong>${i.name}</strong>
+        <button class="btn ghost del-item" data-id="${i.id}">${I18N[LANG].delete}</button>
+      </div>
+      <div class="muted">
+        ${I18N[LANG].qty}: ${i.qty} ${i.unit} — 
+        ${I18N[LANG].reorder}: ${i.reorder} ${i.unit}
+      </div>
+      <div class="progress" style="margin-top:8px">
+        <i style="width:${Math.min(100,(ratio*50+50))}%;background:${color}"></i>
+      </div>`;
+    pantryGrid.appendChild(div);
+  });
+}
+pantryGrid.addEventListener('click',e=>{
+  if(e.target.classList.contains('del-item')){
+    if(!requireLicense()) return;
+    if(!S.user || S.user.role!=='admin'){ alert('Admin only'); return; }
+    S.pantry=S.pantry.filter(x=>x.id!==e.target.dataset.id); persist();
+  }
+});
+document.getElementById('smartList').onclick=()=>{
+  const list=S.pantry.filter(i=>i.qty<=i.reorder).map(i=>`- ${i.name} (${i.unit})`);
+  alert(list.length? (I18N[LANG].reportShopping+':\n'+list.join('\n')) : 'OK');
+};
+function summarizePantry(){
+  const low=S.pantry.filter(i=>i.qty<=i.reorder).map(i=>i.name);
+  return low.length? `${I18N[LANG].kpiLow}: ${low.join(', ')}` : 'OK';
+}
+document.getElementById('sharePantry').onclick=()=> waShare(summarizePantry());
+
+/* ================= Events ================= */
+document.getElementById('addEvent').onclick=()=>{
+  if(!requireLicense()) return;
+  const title=document.getElementById('eventTitle').value.trim();
+  const date=document.getElementById('eventDate').value;
+  const type=document.getElementById('eventType').value;
+  if(!title||!date) return alert('أكمل الحدث والتاريخ / Complete event & date');
+  S.events.push({id:crypto.randomUUID(),title,date,type});
+  document.getElementById('eventTitle').value=''; document.getElementById('eventDate').value='';
+  persist();
+};
+function renderEvents(){
+  eventsTbody.innerHTML='';
+  S.events.sort((a,b)=>a.date.localeCompare(b.date)).forEach(ev=>{
+    const tr=document.createElement('tr');
+    tr.innerHTML=`<td>${ev.title}</td><td>${ev.date}</td><td>${I18N[LANG][ev.type]||ev.type}</td>
+      <td><button class="btn ghost del-ev" data-id="${ev.id}">${I18N[LANG].delete}</button></td>`;
+    eventsTbody.appendChild(tr);
+  });
+}
+eventsTbody.addEventListener('click',e=>{
+  if(e.target.classList.contains('del-ev')){
+    if(!requireLicense()) return;
+    if(!S.user || S.user.role!=='admin'){ alert('Admin only'); return; }
+    S.events=S.events.filter(x=>x.id!==e.target.dataset.id); persist();
+  }
+});
+function summarizeEvents(){
+  const upcoming = S.events.slice().sort((a,b)=>a.date.localeCompare(b.date)).slice(0,5);
+  return upcoming.length? (I18N[LANG].calendar+': '+ upcoming.map(e=>`${e.title} (${e.date})`).join(' | ')) : '—';
+}
+document.getElementById('shareEvents').onclick=()=> waShare(summarizeEvents());
+
+/* ================= Wallet ================= */
+document.getElementById('addTxn').onclick=()=>{
+  if(!requireLicense()) return;
+  const type=document.getElementById('txnType').value;
+  const title=document.getElementById('txnTitle').value.trim();
+  const amount=parseFloat(document.getElementById('txnAmount').value||'0');
+  const date=document.getElementById('txnDate').value || new Date().toISOString().slice(0,10);
+  const category=document.getElementById('txnCategory').value;
+  if(!title||!amount) return alert('أكمل البيانات / Complete fields');
+  S.wallet.push({id:crypto.randomUUID(),type,title,category,date,amount});
+  document.getElementById('txnTitle').value=''; document.getElementById('txnAmount').value='';
+  persist();
+};
+function renderWallet(){
+  walletTbody.innerHTML='';
+  let inc=0, exp=0;
+  S.wallet.sort((a,b)=>a.date.localeCompare(b.date)).forEach(t=>{
+    if(t.type==='income') inc+=+t.amount||0; else exp+=+t.amount||0;
+    const tr=document.createElement('tr');
+    tr.innerHTML=`<td>${I18N[LANG][t.type]}</td><td>${t.title}</td><td>${I18N[LANG][t.category]||t.category}</td><td>${t.date}</td><td>${money(t.amount)}</td>
+      <td><button class="btn ghost del-txn" data-id="${t.id}">${I18N[LANG].delete}</button></td>`;
+    walletTbody.appendChild(tr);
+  });
+  document.getElementById('walletIncome').textContent = money(inc);
+  document.getElementById('walletExpense').textContent = money(exp);
+  document.getElementById('walletBalance').textContent = money(inc-exp);
+}
+walletTbody.addEventListener('click',e=>{
+  if(e.target.classList.contains('del-txn')){
+    if(!requireLicense()) return;
+    if(!S.user || S.user.role!=='admin'){ alert('Admin only'); return; }
+    const id=e.target.dataset.id; S.wallet=S.wallet.filter(x=>x.id!==id); persist();
+  }
+});
+function summarizeWallet(){
+  const inc=S.wallet.filter(t=>t.type==='income').reduce((a,b)=>a+(+b.amount||0),0);
+  const exp=S.wallet.filter(t=>t.type==='expense').reduce((a,b)=>a+(+b.amount||0),0);
+  return `${I18N[LANG].wallet}: ${I18N[LANG].income} ${inc.toFixed(2)} | ${I18N[LANG].expense} ${exp.toFixed(2)} | ${I18N[LANG].balance} ${(inc-exp).toFixed(2)} MAD`;
+}
+document.getElementById('shareWallet').onclick=()=> waShare(summarizeWallet());
+
+/* ================= Family ================= */
+function renderFamily(){
+  const tb=document.querySelector('#familyTable tbody'); tb.innerHTML='';
+  S.family.forEach(m=>{
+    const tr=document.createElement('tr');
+    tr.innerHTML=`<td>${m.name}</td><td>${m.email||'—'}</td><td>${I18N[LANG]['role'+(m.role.charAt(0).toUpperCase()+m.role.slice(1))]||m.role}</td>
+    <td><button class="btn ghost del-fam" data-id="${m.id}">${I18N[LANG].delete}</button></td>`;
+    tb.appendChild(tr);
+  });
+}
+document.getElementById('loginBtn').onclick=()=>{
+  const name=document.getElementById('meName').value.trim();
+  const email=document.getElementById('meEmail').value.trim();
+  const role=document.getElementById('meRole').value;
+  if(!name) return alert('اسمك / Your name');
+  S.user={name,email,role}; persist(); alert((I18N[LANG].login||'Login')+' ✅');
+};
+document.getElementById('addFam').onclick=()=>{
+  if(!requireLicense()) return;
+  if(!S.user || S.user.role!=='admin'){ alert('Admin only'); return; }
+  const name=document.getElementById('famName').value.trim();
+  const email=document.getElementById('famEmail').value.trim();
+  const role=document.getElementById('famRole').value;
+  if(!name) return alert('اسم الفرد / Member name');
+  S.family.push({id:crypto.randomUUID(),name,email,role}); document.getElementById('famName').value=''; document.getElementById('famEmail').value=''; persist();
+};
+document.addEventListener('click',e=>{
+  if(e.target.classList.contains('del-fam')){
+    if(!requireLicense()) return;
+    if(!S.user || S.user.role!=='admin'){ alert('Admin only'); return; }
+    S.family=S.family.filter(x=>x.id!==e.target.dataset.id); persist();
+  }
+});
+
+/* ================= KPI & Charts ================= */
+function renderKPIs(){
+  const pending=S.bills.filter(b=>b.status!=='paid');
+  document.getElementById('kpiBills').textContent=pending.length;
+  document.getElementById('kpiLow').textContent=S.pantry.filter(i=>i.qty<=i.reorder).length;
+  const next=S.events.slice().sort((a,b)=>a.date.localeCompare(b.date))[0];
+  document.getElementById('kpiEvent').textContent=next? `${next.title} — ${next.date}`:'—';
+  const inc=S.wallet.filter(t=>t.type==='income').reduce((a,b)=>a+(+b.amount||0),0);
+  const exp=S.wallet.filter(t=>t.type==='expense').reduce((a,b)=>a+(+b.amount||0),0);
+  document.getElementById('kpiBalance').textContent=money(inc-exp);
+}
+function drawBar(canvasId, labels, values, color){
+  const c=document.querySelector(canvasId); if(!c) return; const ctx=c.getContext('2d');
+  ctx.clearRect(0,0,c.width,c.height); const W=c.width,H=c.height; const max=Math.max(1,...values);
+  const pad=40; const bw=(W-2*pad)/values.length*0.7; const gap=(W-2*pad)/values.length*0.3;
+  ctx.strokeStyle='#333'; ctx.beginPath(); ctx.moveTo(pad,10); ctx.lineTo(pad,H-pad); ctx.lineTo(W-10,H-pad); ctx.stroke();
+  values.forEach((v,i)=>{ const x=pad+i*(bw+gap)+gap/2; const h=(H-pad-20)*(v/max); ctx.fillStyle=color; ctx.fillRect(x,(H-pad)-h,bw,h);
+    ctx.fillStyle='#9CA3AF'; ctx.font='12px system-ui'; ctx.textAlign='center'; ctx.fillText(labels[i], x+bw/2, H-pad+14); });
+}
+function drawPie(canvasId, labels, values, colors){
+  const c=document.querySelector(canvasId); if(!c) return; const ctx=c.getContext('2d');
+  ctx.clearRect(0,0,c.width,c.height); const W=c.width,H=c.height; const cx=W/2,cy=H/2,r=Math.min(W,H)/3;
+  const sum=values.reduce((a,b)=>a+b,0)||1; let a0=-Math.PI/2;
+  values.forEach((v,i)=>{ const ang=2*Math.PI*v/sum; ctx.beginPath(); ctx.moveTo(cx,cy); ctx.fillStyle=colors[i%colors.length];
+    ctx.arc(cx,cy,r,a0,a0+ang); ctx.closePath(); ctx.fill(); a0+=ang; });
+  ctx.font='12px system-ui'; ctx.textAlign='left';
+  labels.forEach((l,i)=>{ ctx.fillStyle=colors[i%colors.length]; ctx.fillRect(10,10+i*18,10,10); ctx.fillStyle='#9CA3AF'; ctx.fillText(l+' ('+(values[i]||0)+')', 26,20+i*18); });
+}
+function renderCharts(){
+  const inc=S.wallet.filter(t=>t.type==='income').reduce((a,b)=>a+(+b.amount||0),0);
+  const exp=S.wallet.filter(t=>t.type==='expense').reduce((a,b)=>a+(+b.amount||0),0);
+  drawBar('#chartIncomeExpense', [I18N[LANG].income,I18N[LANG].expense], [inc,exp], '#22C55E');
+  const byCat={}; S.wallet.filter(t=>t.type==='expense').forEach(t=>{byCat[I18N[LANG][t.category]||t.category]=(byCat[I18N[LANG][t.category]||t.category]||0)+(+t.amount||0);});
+  const catLabels=Object.keys(byCat); const catValues=catLabels.map(k=>byCat[k]);
+  drawPie('#chartCategories', catLabels.length?catLabels:['—'], catValues.length?catValues:[1], ['#22C55E','#f59e0b','#ef4444','#38bdf8','#a78bfa']);
+  const last=S.wallet.slice(-10); let bal=0; const labels=last.map(t=>t.date.slice(5)); const vals=last.map(t=>{bal+=(t.type==='income'?+t.amount:-(+t.amount||0)); return bal;});
+  drawBar('#chartBalance', labels.length?labels:['—'], vals.length?vals:[0], '#D4AF37');
+  const cat2={}; S.wallet.forEach(t=>{cat2[I18N[LANG][t.category]||t.category]=(cat2[I18N[LANG][t.category]||t.category]||0)+(+t.amount||0);});
+  drawPie('#chartByCat', Object.keys(cat2).length?Object.keys(cat2):['—'], Object.values(cat2).length?Object.values(cat2):[1], ['#22C55E','#f59e0b','#ef4444','#38bdf8','#a78bfa']);
+}
+
+/* ================= Reports & WA share ================= */
+document.getElementById('reportLang').value = LANG;
+document.querySelectorAll('[data-report]').forEach(b=>{
+  b.onclick=()=>{ if(!requireLicense()) return;
+    const t=b.dataset.report;
+    if (t==='bills') printSection('bills');
+    else if (t==='pantry') printSection('pantry');
+    else if (t==='events') printSection('calendar');
+    else if (t==='shopping') alert(I18N[LANG].reportShopping+' → '+I18N[LANG].smartList);
+  };
+});
+document.getElementById('shareReportBills').onclick=()=> waShare(summarizeBills());
+document.getElementById('shareReportPantry').onclick=()=> waShare(summarizePantry());
+document.getElementById('shareReportEvents').onclick=()=> waShare(summarizeEvents());
+document.getElementById('shareReportShopping').onclick=()=> waShare((I18N[LANG].reportShopping||'Shopping')+': '+ S.pantry.filter(i=>i.qty<=i.reorder).map(i=>i.name).join(', '));
+
+/* ================= Assistant ================= */
+const chat=document.getElementById('chat');
+function pushMsg(text, who='bot'){ const div=document.createElement('div'); div.className='msg '+(who==='user'?'user':'bot'); div.textContent=text; chat.appendChild(div); chat.scrollTop=chat.scrollHeight; }
+pushMsg(I18N[LANG].welcome+' — '+(I18N[LANG].assistantTitle||'Assistant'));
+document.getElementById('askBtn').onclick=()=>{
+  const q=document.getElementById('ask').value.trim(); if(!q) return;
+  pushMsg(q,'user'); document.getElementById('ask').value='';
+  setTimeout(()=>pushMsg(answer(q)),250);
+};
+function answer(q){
+  const lq=q.toLowerCase();
+  if(lq.includes('صرف')||lq.includes('dépens')||lq.includes('spent')){
+    const m=new Date().toISOString().slice(0,7);
+    const sum=S.wallet.filter(t=>t.type==='expense' && t.date.startsWith(m)).reduce((a,b)=>a+(+b.amount||0),0);
+    return (I18N[LANG].expense||'Expense')+' '+sum.toFixed(2)+' MAD';
+  }
+  if(lq.includes('دخل')||lq.includes('revenu')||lq.includes('income')){
+    const m=new Date().toISOString().slice(0,7);
+    const sum=S.wallet.filter(t=>t.type==='income' && t.date.startsWith(m)).reduce((a,b)=>a+(+b.amount||0),0);
+    return (I18N[LANG].income||'Income')+' '+sum.toFixed(2)+' MAD';
+  }
+  if(lq.includes('فواتير')||lq.includes('factures')||lq.includes('bills')||lq.includes('due')){
+    const txt=S.bills.filter(b=>b.status!=='paid').map(b=>`${b.provider} (${b.due})`).join(' | ') || '—';
+    return (I18N[LANG].bills||'Bills')+': '+txt;
+  }
+  if(lq.includes('لائحة')||lq.includes('achats')||lq.includes('shopping')){
+    const list=S.pantry.filter(i=>i.qty<=i.reorder).map(i=>i.name).join(', ') || '—';
+    return (I18N[LANG].reportShopping||'Shopping')+': '+list;
+  }
+  return '…';
+}
+document.getElementById('toggleAssistant').onclick=()=>{document.getElementById('assistant').style.display='none';};
+
+/* ================= Onboarding & Trial check ================= */
+const onboardingModal=document.getElementById('onboardingModal');
+document.getElementById('onboardingBtn').onclick=()=>{onboardingModal.style.display='flex';};
+document.getElementById('closeOnboarding').onclick=()=>{onboardingModal.style.display='none';};
+if(!localStorage.getItem('esm_onboarded')){ onboardingModal.style.display='flex'; localStorage.setItem('esm_onboarded','1'); }
+window.addEventListener('load', ()=>{
+  applyI18n();
+  if (!trialActive()) document.getElementById('licenseModal').style.display='flex';
+});
+
+/* ================= Share All ================= */
+document.getElementById('shareAllBtn').onclick=()=>{
+  const text=[summarizeBills(), summarizePantry(), summarizeEvents(), summarizeWallet()].join(' | ');
+  waShare(text);
+};
+
+/* ================= Initial render ================= */
+renderAll(); applyI18n();
+</script>
+</body>
+</html>
