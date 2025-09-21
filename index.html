@@ -3,374 +3,606 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-  <title>E-Smart Market Pro — إدارة البيت</title>
+  <title>E‑Smart My Home Dash — إدارة ذكية للبيت</title>
   <meta name="theme-color" content="#D4AF37">
-
-  <!-- Manifest مضمّن عبر Data URI -->
-  <link rel="manifest" href="data:application/json;base64,ewogIm5hbWUiOiJFLVNtYXJ0IE1hcmtldCBQcm8iLCJzaG9ydF9uYW1lIjoiRS1TbWFydCIsInN0YXJ0X3VybCI6Ii4iLCJkaXNwbGF5Ijoic3RhbmRhbG9uZSIsImJhY2tncm91bmRfY29sb3IiOiIjMEIwQjBCIiwi dGhlbWVfY29sb3IiOiIjRD RB RjM3In0=">
-
   <style>
-    /* ========== CSS عام للمشروع ========== */
-    :root {
-      --bg: #0B0B0B;
-      --panel: #111317;
-      --gold: #D4AF37;
-      --green: #22C55E;
-      --muted: #9CA3AF;
-      --white: #fff;
-      --warn: #f59e0b;
-      --danger: #ef4444;
-      --line: #1f2937;
+    :root{
+      --bg:#0B0B0B; --panel:#111317; --line:#1f2937;
+      --gold:#D4AF37; --green:#22C55E; --white:#fff; --muted:#9CA3AF;
+      --warn:#f59e0b; --danger:#ef4444; --blue:#004aad; --orange:#ff7b00;
     }
-    * { box-sizing: border-box; }
-    html,body {
-      margin: 0;
-      padding: 0;
-      background: var(--bg);
-      color: var(--white);
-      font-family: system-ui,Segoe UI,Inter,Noto Sans Arabic,Arial;
-      height: 100vh;
+    *{box-sizing:border-box}
+    html,body{margin:0;background:var(--bg);color:var(--white);font-family:system-ui,Segoe UI,Inter,"Noto Sans Arabic",Arial}
+    .container{max-width:1200px;margin:auto;padding:16px;min-height:100vh;display:flex;flex-direction:column;gap:12px}
+    .header{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+    .brand{display:flex;align-items:center;gap:12px}
+    .logo{width:42px;height:42px;border-radius:10px;border:2px solid var(--gold);display:grid;place-items:center;font-weight:800;color:var(--gold)}
+    h1{margin:0;color:var(--gold);font-size:1.1rem}
+    .actions{display:flex;gap:8px;flex-wrap:wrap}
+    .btn{padding:8px 12px;border-radius:8px;border:1px solid var(--gold);background:transparent;color:var(--white);cursor:pointer}
+    .btn.primary{background:var(--gold);border:none;color:#000}
+    .btn.ghost{border-color:#333}
+    .badges{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+    .badge{font-size:.8rem;border:1px solid #333;padding:4px 8px;border-radius:999px;color:var(--muted)}
+    .tabs{display:flex;gap:8px;flex-wrap:wrap}
+    .tab{padding:8px 12px;border-radius:8px;border:1px solid #333;background:transparent;color:var(--white);cursor:pointer}
+    .tab.active{border-color:var(--gold);background:var(--panel);color:var(--gold)}
+    .grid{display:grid;gap:12px}
+    .panel{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px;min-height:220px}
+    .panel h2{margin:0 0 10px;color:var(--gold);font-size:1rem}
+    .row{display:flex;gap:8px;flex-wrap:wrap}
+    input,select{background:#0b0b0b;border:1px solid #2a2a2a;color:#fff;border-radius:8px;padding:8px 10px}
+    table{width:100%;border-collapse:collapse}
+    th,td{border-bottom:1px solid #222;padding:8px;text-align:start}
+    tfoot td{font-weight:700}
+    .muted{color:var(--muted)}
+    .ok{color:var(--green)} .warn{color:var(--warn)} .danger{color:var(--danger)}
+    .split{display:grid;grid-template-columns:1fr;gap:12px}
+    @media(min-width:900px){.split{grid-template-columns:1.2fr .8fr}}
+    /* Pantry */
+    #pantry .row > *{min-width:120px}
+    #stockList .item{display:flex;justify-content:space-between;align-items:center;background:#0c0f14;border:1px solid #1a1f27;border-radius:10px;padding:10px;margin-bottom:8px}
+    #stockList .qty{font-weight:700}
+    .mini{font-size:.85rem}
+    /* Bills print */
+    @media print{
+      .no-print{display:none !important}
+      body{background:#fff;color:#000}
+      .panel{border:none}
+      table,th,td{border:1px solid #000;border-collapse:collapse}
     }
-    .container {
-      max-width: 1200px;
-      margin: auto;
-      padding: 16px;
-      display: flex;
-      flex-direction: column;
-      height: 100%;
-    }
-    .header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-    .brand { display: flex; align-items: center; gap: 12px; }
-    .logo {
-      width: 40px; height: 40px;
-      border-radius: 10px;
-      background: #000;
-      border: 2px solid var(--gold);
-      display: grid;
-      place-items: center;
-      color: var(--gold);
-      font-weight: bold;
-    }
-    h1 { margin: 0; color: var(--gold); font-size: 1.2em; }
-    .actions { display: flex; gap: 8px; flex-wrap: wrap; }
-    .btn {
-      padding: 8px 12px;
-      border-radius: 8px;
-      border: 1px solid var(--gold);
-      background: transparent;
-      color: var(--white);
-      cursor: pointer;
-    }
-    .btn.primary { background: var(--gold); color: #000; border: none; }
-    .tabs {
-      display: flex;
-      gap: 8px;
-      margin: 16px 0;
-      flex-wrap: wrap;
-    }
-    .tab {
-      padding: 8px 12px;
-      border-radius: 8px;
-      border: 1px solid #333;
-      background: transparent;
-      color: var(--white);
-      cursor: pointer;
-    }
-    .tab.active {
-      border-color: var(--gold);
-      background: var(--panel);
-      color: var(--gold);
-    }
-    .panel {
-      flex: 1;
-      background: var(--panel);
-      border: 1px solid var(--line);
-      border-radius: 12px;
-      padding: 16px;
-      overflow: auto;
-    }
-    .panel h2 {
-      margin-top: 0;
-      color: var(--gold);
-      font-size: 1em;
-    }
-
-    /* ========== Overrides وحدة المخزون ========== */
-    #pantry form, #pantry .stock-list { margin-bottom: 16px; }
-    #pantry form input,
-    #pantry form select,
-    #pantry form button {
-      margin: 4px;
-      padding: 6px;
-      border: 1px solid #333;
-      border-radius: 6px;
-      background: #0b0b0b;
-      color: #fff;
-    }
-    #pantry .stock-list .item {
-      background: var(--panel);
-      padding: 10px;
-      margin-bottom: 8px;
-      border-radius: 8px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-    #pantry .btn.export { background: #ff7b00; border:none; color:#000; }
-    #pantry .btn.import { background: #004aad; border:none; color:#fff; }
-    #pantry .btn.reset  { background: var(--danger); border:none; }
-    #pantry .btn.edit   { background: #ffc107; border:none; color:#000; }
   </style>
 </head>
 <body>
   <div class="container">
-    <!-- Header -->
     <div class="header">
       <div class="brand">
         <div class="logo">e</div>
-        <h1>E-Smart Market Pro</h1>
+        <div>
+          <h1>E‑Smart My Home Dash</h1>
+          <div class="badges">
+            <span class="badge">PWA</span>
+            <span class="badge">Offline</span>
+            <span class="badge">AR/FR/AMZ-ready</span>
+          </div>
+        </div>
       </div>
-      <div class="actions">
+      <div class="actions no-print">
+        <button class="btn" id="syncBtn">🔄 مزامنة</button>
+        <button class="btn ghost" id="exportAllBtn">📤 تصدير الكل</button>
         <button class="btn primary" id="installBtn">⬇️ تثبيت التطبيق</button>
       </div>
     </div>
 
-    <!-- Tabs -->
-    <div class="tabs" id="tabs">
+    <div class="tabs no-print" id="tabs">
       <button class="tab active" data-tab="home">اللوحة</button>
       <button class="tab" data-tab="bills">الفواتير</button>
       <button class="tab" data-tab="pantry">المخزون</button>
       <button class="tab" data-tab="calendar">الرزنامة</button>
+      <button class="tab" data-tab="settings">الإعدادات</button>
     </div>
 
-    <!-- Home -->
     <section id="home" class="panel">
       <h2>ملخص سريع</h2>
-      <p>هنا تعرض إحصائيات وأشكال بيانية…</p>
+      <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(220px,1fr));">
+        <div class="panel">
+          <div class="muted mini">المنتجات</div>
+          <div id="kpiProducts" class="ok" style="font-size:1.6rem">0</div>
+        </div>
+        <div class="panel">
+          <div class="muted mini">قيمة المخزون التقديرية</div>
+          <div id="kpiStockVal" style="font-size:1.6rem">—</div>
+        </div>
+        <div class="panel">
+          <div class="muted mini">فواتير هذا الشهر</div>
+          <div id="kpiBills" style="font-size:1.6rem">0</div>
+        </div>
+        <div class="panel">
+          <div class="muted mini">أحداث قادمة</div>
+          <div id="kpiEvents" style="font-size:1.6rem">0</div>
+        </div>
+      </div>
     </section>
 
-    <!-- Bills -->
     <section id="bills" class="panel" style="display:none">
       <h2>الفواتير</h2>
-      <p>واجهة إدارة الفواتير تأتي هنا.</p>
+      <div class="split">
+        <div class="panel">
+          <div class="row">
+            <input id="billCustomer" placeholder="العميل">
+            <input id="billDate" type="date">
+            <button class="btn" id="newBillBtn">🧾 فاتورة جديدة</button>
+          </div>
+          <div class="row" style="margin-top:8px">
+            <input id="itemName" placeholder="العنصر">
+            <input id="itemQty" type="number" placeholder="الكمية" min="1" value="1">
+            <input id="itemPrice" type="number" step="0.01" placeholder="السعر">
+            <button class="btn" id="addItemBtn">➕ إضافة عنصر</button>
+          </div>
+
+          <table style="margin-top:10px">
+            <thead>
+              <tr><th>العنصر</th><th>الكمية</th><th>السعر</th><th>الإجمالي</th><th class="no-print">إجراءات</th></tr>
+            </thead>
+            <tbody id="billItems"></tbody>
+            <tfoot>
+              <tr><td colspan="3">المجموع</td><td id="billTotal">0</td><td class="no-print"></td></tr>
+            </tfoot>
+          </table>
+
+          <div class="row no-print" style="margin-top:10px">
+            <button class="btn" id="saveBillBtn">💾 حفظ</button>
+            <button class="btn" id="printBillBtn">🖨️ طباعة</button>
+            <button class="btn ghost" id="exportBillBtn">📤 تصدير JSON</button>
+            <button class="btn danger" id="resetBillBtn" style="border-color:var(--danger);color:var(--danger)">🗑️ مسح</button>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="row">
+            <input id="billSearch" placeholder="بحث بالعميل/التاريخ">
+          </div>
+          <div id="billsList" style="margin-top:8px"></div>
+        </div>
+      </div>
     </section>
 
-    <!-- Pantry (المخزون) -->
     <section id="pantry" class="panel" style="display:none">
       <h2>المطبخ والمخزون</h2>
-
-      <!-- إضافة/تعديل -->
-      <form id="addProductForm">
-        <input id="productName"    type="text" placeholder="اسم المنتج" required>
-        <input id="productUnit"    type="text" placeholder="الوحدة (mg/ml/pc…)" required>
-        <input id="productTotal"   type="number" placeholder="الكمية الكلية" required>
-        <button class="btn primary" id="submitBtn">إضافة</button>
-      </form>
-
-      <!-- استهلاك -->
-      <form id="consumeForm">
-        <select id="productSelect"></select>
-        <input id="consumeAmount"  type="number" placeholder="الكمية المستهلكة" required>
-        <button class="btn">خصم</button>
-      </form>
-
-      <!-- تحكم تصدير/استيراد/مسح -->
-      <button class="btn export" id="exportBtn">📤 تصدير JSON</button>
-      <button class="btn import" id="importBtn">📥 استيراد JSON</button>
-      <button class="btn reset"  id="resetBtn">🗑️ إعادة تعيين</button>
-      <input type="file" id="importFile" accept="application/json" style="display:none">
-
-      <!-- قائمة -->
-      <div class="stock-list" id="stockList"></div>
+      <div class="panel">
+        <div class="row">
+          <input id="productName" placeholder="اسم المنتج" required>
+          <input id="productUnit" placeholder="الوحدة (mg/ml/pc…)" required>
+          <input id="productTotal" type="number" placeholder="الكمية الكلية" required>
+          <input id="productCost" type="number" step="0.01" placeholder="التكلفة/وحدة (اختياري)">
+          <button class="btn primary" id="submitProductBtn">إضافة</button>
+        </div>
+        <div class="row">
+          <select id="productSelect"></select>
+          <input id="consumeAmount" type="number" placeholder="الكمية المستهلكة">
+          <button class="btn" id="consumeBtn">➖ خصم</button>
+        </div>
+        <div class="row no-print">
+          <button class="btn" id="exportProductsBtn" style="background:var(--orange);border:none;color:#000">📤 تصدير</button>
+          <button class="btn" id="importProductsBtn" style="background:var(--blue);border:none">📥 استيراد</button>
+          <input type="file" id="importProductsFile" accept="application/json" style="display:none">
+          <button class="btn" id="resetProductsBtn" style="background:var(--danger);border:none">🗑️ إعادة تعيين</button>
+        </div>
+        <div id="stockList" style="margin-top:10px"></div>
+      </div>
     </section>
 
-    <!-- Calendar -->
     <section id="calendar" class="panel" style="display:none">
       <h2>الرزنامة</h2>
-      <p>واجهة إدارة الأحداث هنا.</p>
+      <div class="split">
+        <div class="panel">
+          <div class="row">
+            <input id="eventTitle" placeholder="عنوان الحدث">
+            <input id="eventDate" type="date">
+            <button class="btn" id="addEventBtn">➕ إضافة</button>
+          </div>
+          <table style="margin-top:10px">
+            <thead><tr><th>التاريخ</th><th>الحدث</th><th class="no-print">إجراءات</th></tr></thead>
+            <tbody id="eventsTbody"></tbody>
+          </table>
+        </div>
+        <div class="panel">
+          <div class="muted mini">تلميحات</div>
+          <ul>
+            <li>يمكنك استخدام الرزنامة لتذكير المهام العائلية.</li>
+            <li>البيانات تحفظ محليًا وتُصدَّر ضمن "تصدير الكل".</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section id="settings" class="panel" style="display:none">
+      <h2>الإعدادات</h2>
+      <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(260px,1fr));">
+        <div class="panel">
+          <div class="muted mini">اللغة والهوية البصرية</div>
+          <div class="row" style="margin-top:8px">
+            <select id="langSelect">
+              <option value="ar">العربية</option>
+              <option value="fr">Français</option>
+              <option value="en">English</option>
+            </select>
+            <button class="btn" id="applyLangBtn">تطبيق</button>
+          </div>
+        </div>
+        <div class="panel">
+          <div class="muted mini">النسخ الاحتياطي</div>
+          <div class="row" style="margin-top:8px">
+            <button class="btn" id="exportAllBtn2">📤 تصدير الكل</button>
+            <input type="file" id="importAllFile" accept="application/json" style="display:none">
+            <button class="btn" id="importAllBtn">📥 استيراد الكل</button>
+          </div>
+        </div>
+      </div>
     </section>
   </div>
 
   <script>
-  // ===== تبديل التبويبات =====
-  document.querySelectorAll('.tab').forEach(tab => {
-    tab.onclick = () => {
+  /* ============ أدوات تخزين ============ */
+  const db = {
+    get: (k, def) => {
+      try{ return JSON.parse(localStorage.getItem(k)) ?? def; }catch{ return def; }
+    },
+    set: (k, v) => localStorage.setItem(k, JSON.stringify(v)),
+    del: (k) => localStorage.removeItem(k)
+  };
+
+  /* ============ تبويبات ============ */
+  document.querySelectorAll('.tab').forEach(tab=>{
+    tab.onclick=()=>{
       document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
       tab.classList.add('active');
-      document.querySelectorAll('.panel').forEach(p=>p.style.display='none');
+      document.querySelectorAll('section.panel').forEach(p=>p.style.display='none');
       document.getElementById(tab.dataset.tab).style.display='block';
+      if(tab.dataset.tab==='pantry') initPantryOnce();
+      if(tab.dataset.tab==='bills') initBillsOnce();
+      if(tab.dataset.tab==='calendar') initCalendarOnce();
     };
   });
 
-  // ===== وحدة المخزون =====
+  /* ============ KPI ============ */
+  function refreshKPIs(){
+    const products = db.get('products',[]);
+    const invoices = db.get('invoices',[]);
+    const events   = db.get('events',[]);
+    document.getElementById('kpiProducts').textContent = products.length;
+    // تقدير قيمة المخزون = مجموع (المتبقي * التكلفة/وحدة) إن وُجدت
+    const val = products.reduce((s,p)=> s + ((p.total-p.used)*(Number(p.cost)||0)), 0);
+    document.getElementById('kpiStockVal').textContent = val>0 ? val.toFixed(2) : '—';
+    const month = new Date().toISOString().slice(0,7);
+    const thisMonth = invoices.filter(b => (b.date||'').startsWith(month)).length;
+    document.getElementById('kpiBills').textContent = thisMonth;
+    const upcoming = events.filter(e => e.date >= new Date().toISOString().slice(0,10)).length;
+    document.getElementById('kpiEvents').textContent = upcoming;
+  }
+
+  /* ============ المخزون ============ */
+  let pantryInitialized=false;
+  function initPantryOnce(){ if(!pantryInitialized){ pantryInitialized=true; initPantry(); } }
+
   function initPantry(){
-    let products = JSON.parse(localStorage.getItem("products"))||[];
+    let products = db.get('products',[]);
     let editIndex = null;
     const refs = {
-      addForm:       document.getElementById("addProductForm"),
-      consumeForm:   document.getElementById("consumeForm"),
-      exportBtn:     document.getElementById("exportBtn"),
-      importBtn:     document.getElementById("importBtn"),
-      resetBtn:      document.getElementById("resetBtn"),
-      importFile:    document.getElementById("importFile"),
-      productSelect: document.getElementById("productSelect"),
-      stockList:     document.getElementById("stockList"),
-      submitBtn:     document.getElementById("submitBtn"),
-      nameInput:     document.getElementById("productName"),
-      unitInput:     document.getElementById("productUnit"),
-      totalInput:    document.getElementById("productTotal"),
-      consumeInput:  document.getElementById("consumeAmount")
+      name: document.getElementById('productName'),
+      unit: document.getElementById('productUnit'),
+      total: document.getElementById('productTotal'),
+      cost: document.getElementById('productCost'),
+      submit: document.getElementById('submitProductBtn'),
+      sel: document.getElementById('productSelect'),
+      consume: document.getElementById('consumeAmount'),
+      consumeBtn: document.getElementById('consumeBtn'),
+      list: document.getElementById('stockList'),
+      exportBtn: document.getElementById('exportProductsBtn'),
+      importBtn: document.getElementById('importProductsBtn'),
+      importFile: document.getElementById('importProductsFile'),
+      resetBtn: document.getElementById('resetProductsBtn')
     };
 
-    const saveData = ()=> {
-      localStorage.setItem("products", JSON.stringify(products));
-    };
-
-    function updateUI(){
-      // Dropdown
-      refs.productSelect.innerHTML = "";
-      products.forEach((p,i)=>{
-        const o = document.createElement("option");
-        o.value = i; o.textContent = p.name;
-        refs.productSelect.appendChild(o);
+    function save(){ db.set('products', products); refreshKPIs(); }
+    function render(){
+      // dropdown
+      refs.sel.innerHTML='';
+      products.forEach((p,i)=> {
+        const o=document.createElement('option'); o.value=i; o.textContent=p.name; refs.sel.appendChild(o);
       });
-      // List
-      refs.stockList.innerHTML = "";
+      // list
+      refs.list.innerHTML='';
       products.forEach((p,i)=>{
-        const div = document.createElement("div");
-        div.className = "item";
-        div.innerHTML = `
-          <span><strong>${p.name}</strong> — ${p.used}/${p.total}${p.unit}</span>
-          <span><button class="btn edit" onclick="editProduct(${i})">✏️</button></span>
-        `;
-        refs.stockList.appendChild(div);
+        const item=document.createElement('div'); item.className='item';
+        const remain = (p.total - p.used);
+        item.innerHTML=`
+          <div>
+            <div><strong>${p.name}</strong> <span class="muted mini">(${p.unit})</span></div>
+            <div class="mini">المستهلك: <span>${p.used}</span> | المتبقي: <span class="qty ${remain<=0?'danger':remain<=(p.total*0.2)?'warn':'ok'}">${remain}</span> / ${p.total}</div>
+            <div class="mini muted">تكلفة/وحدة: ${p.cost?Number(p.cost):'-'}</div>
+          </div>
+          <div class="row no-print">
+            <button class="btn" onclick="window.p_edit(${i})" style="background:#ffc107;border:none;color:#000">✏️</button>
+            <button class="btn" onclick="window.p_delete(${i})" style="background:#222;border-color:#333">🗑️</button>
+          </div>`;
+        refs.list.appendChild(item);
       });
     }
 
-    window.editProduct = i=>{
-      const p = products[i];
-      refs.nameInput.value  = p.name;
-      refs.unitInput.value  = p.unit;
-      refs.totalInput.value = p.total;
-      editIndex = i;
-      refs.submitBtn.textContent = "تحديث";
+    window.p_edit = (i)=>{
+      const p=products[i];
+      refs.name.value=p.name; refs.unit.value=p.unit; refs.total.value=p.total; refs.cost.value=p.cost||'';
+      editIndex=i; refs.submit.textContent='تحديث';
+    };
+    window.p_delete = (i)=>{
+      if(confirm('حذف هذا المنتج؟')){ products.splice(i,1); save(); render(); }
     };
 
-    refs.addForm.onsubmit = e=>{
+    refs.submit.onclick=(e)=>{
       e.preventDefault();
-      const name  = refs.nameInput.value;
-      const unit  = refs.unitInput.value;
-      const total = +refs.totalInput.value;
-      if(editIndex!==null){
-        products[editIndex] = {...products[editIndex], name, unit, total};
-        editIndex = null;
-        refs.submitBtn.textContent = "إضافة";
-      } else {
-        products.push({name,unit,total,used:0});
-      }
-      saveData();
-      updateUI();
-      refs.addForm.reset();
-    };
-
-    refs.consumeForm.onsubmit = e=>{
-      e.preventDefault();
-      const i   = +refs.productSelect.value;
-      const amt = +refs.consumeInput.value;
-      if(products[i].total - products[i].used >= amt){
-        products[i].used += amt;
-        saveData();
-        updateUI();
-      } else alert("⚠️ المخزون غير كافٍ!");
-      refs.consumeForm.reset();
-    };
-
-    refs.exportBtn.onclick = ()=>{
-      const blob = new Blob([JSON.stringify(products,null,2)], {type:"application/json"});
-      const url  = URL.createObjectURL(blob);
-      const a    = document.createElement("a");
-      a.href    = url;
-      a.download= "stock-data.json";
-      a.click();
-      URL.revokeObjectURL(url);
-    };
-
-    refs.importBtn.onclick = ()=> refs.importFile.click();
-    refs.importFile.onchange = e=>{
-      const f = e.target.files[0];
-      if(!f) return;
-      const r = new FileReader();
-      r.onload = ev=>{
-        try {
-          const arr = JSON.parse(ev.target.result);
-          if(Array.isArray(arr)){
-            products = arr;
-            saveData();
-            updateUI();
-            alert("✅ تم استيراد البيانات!");
-          } else throw "";
-        } catch {
-          alert("⚠️ ملف غير صالح");
-        }
+      const p = {
+        name: refs.name.value.trim(),
+        unit: refs.unit.value.trim(),
+        total: Number(refs.total.value||0),
+        used: editIndex!=null ? products[editIndex].used : 0,
+        cost: refs.cost.value? Number(refs.cost.value) : null
       };
-      r.readAsText(f);
+      if(!p.name || !p.unit || !(p.total>=0)) return alert('يرجى إدخال بيانات صحيحة.');
+      if(editIndex!=null){ products[editIndex] = p; editIndex=null; refs.submit.textContent='إضافة'; }
+      else products.push(p);
+      refs.name.value=refs.unit.value=refs.total.value=refs.cost.value='';
+      save(); render();
     };
 
-    refs.resetBtn.onclick = ()=>{
-      if(confirm("⚠️ مسح كل البيانات؟")){
-        products=[];
-        localStorage.removeItem("products");
-        updateUI();
-        alert("✅ تم المسح!");
-      }
+    refs.consumeBtn.onclick=(e)=>{
+      e.preventDefault();
+      const i=Number(refs.sel.value); const amt=Number(refs.consume.value||0);
+      if(isNaN(i) || isNaN(amt) || amt<=0) return;
+      if(products[i].total - products[i].used >= amt){ products[i].used += amt; save(); render(); refs.consume.value=''; }
+      else alert('⚠️ المخزون غير كافٍ!');
     };
 
-    updateUI();
+    refs.exportBtn.onclick=()=>{
+      const blob=new Blob([JSON.stringify(products,null,2)],{type:'application/json'});
+      const url=URL.createObjectURL(blob); const a=document.createElement('a');
+      a.href=url; a.download='products.json'; a.click(); URL.revokeObjectURL(url);
+    };
+    refs.importBtn.onclick=()=>refs.importFile.click();
+    refs.importFile.onchange=(e)=>{
+      const f=e.target.files[0]; if(!f) return;
+      const r=new FileReader(); r.onload=ev=>{
+        try{
+          const arr=JSON.parse(ev.target.result);
+          if(Array.isArray(arr)){ products=arr; save(); render(); alert('تم الاستيراد بنجاح.'); }
+          else throw 'bad';
+        }catch{ alert('ملف غير صالح.'); }
+      }; r.readAsText(f);
+    };
+    refs.resetBtn.onclick=()=>{
+      if(confirm('مسح كل بيانات المخزون؟')){ products=[]; db.del('products'); render(); refreshKPIs(); }
+    };
+
+    render(); refreshKPIs();
   }
-  // استدعاء وحدة المخزون عند فتح التبويب
-  document.querySelector('[data-tab="pantry"]').addEventListener('click', initPantry);
 
-  // ===== PWA & Service Worker =====
+  /* ============ الفواتير ============ */
+  let billsInitialized=false;
+  function initBillsOnce(){ if(!billsInitialized){ billsInitialized=true; initBills(); } }
+
+  function initBills(){
+    let invoices = db.get('invoices',[]);
+    let draft = db.get('bill_draft',{id:null,customer:'',date:'',items:[]});
+
+    const r = {
+      customer: document.getElementById('billCustomer'),
+      date: document.getElementById('billDate'),
+      newBtn: document.getElementById('newBillBtn'),
+      itemName: document.getElementById('itemName'),
+      itemQty: document.getElementById('itemQty'),
+      itemPrice: document.getElementById('itemPrice'),
+      addItem: document.getElementById('addItemBtn'),
+      itemsT: document.getElementById('billItems'),
+      total: document.getElementById('billTotal'),
+      save: document.getElementById('saveBillBtn'),
+      print: document.getElementById('printBillBtn'),
+      export: document.getElementById('exportBillBtn'),
+      reset: document.getElementById('resetBillBtn'),
+      search: document.getElementById('billSearch'),
+      list: document.getElementById('billsList')
+    };
+
+    function saveDraft(){ db.set('bill_draft', draft); }
+    function sum(){ return draft.items.reduce((s,it)=> s + it.qty*it.price, 0); }
+    function renderDraft(){
+      r.customer.value=draft.customer||''; r.date.value=draft.date||'';
+      r.itemsT.innerHTML='';
+      draft.items.forEach((it,i)=>{
+        const tr=document.createElement('tr');
+        tr.innerHTML=`<td>${it.name}</td><td>${it.qty}</td><td>${it.price.toFixed(2)}</td><td>${(it.qty*it.price).toFixed(2)}</td>
+        <td class="no-print"><button class="btn" onclick="window.b_rm(${i})">حذف</button></td>`;
+        r.itemsT.appendChild(tr);
+      });
+      r.total.textContent = sum().toFixed(2);
+    }
+    window.b_rm = (i)=>{ draft.items.splice(i,1); saveDraft(); renderDraft(); };
+
+    function renderList(){
+      r.list.innerHTML='';
+      const q=(r.search.value||'').toLowerCase();
+      invoices
+        .filter(b=> !q || (b.customer||'').toLowerCase().includes(q) || (b.date||'').includes(q))
+        .slice(-50).reverse()
+        .forEach((b,idx)=>{
+          const div=document.createElement('div'); div.className='item';
+          const total=b.items.reduce((s,it)=>s+it.qty*it.price,0).toFixed(2);
+          div.style.cssText='background:#0c0f14;border:1px solid #1a1f27;border-radius:10px;padding:8px;margin-bottom:6px';
+          div.innerHTML=`<div><strong>${b.customer||'—'}</strong> <span class="muted mini">(${b.date||'—'})</span></div>
+                         <div class="mini">المجموع: ${total}</div>`;
+          r.list.appendChild(div);
+        });
+    }
+
+    r.newBtn.onclick=()=>{ draft={id:null,customer:'',date:new Date().toISOString().slice(0,10),items:[]}; saveDraft(); renderDraft(); };
+    r.addItem.onclick=()=>{
+      const name=r.itemName.value.trim(); const qty=Number(r.itemQty.value||0); const price=Number(r.itemPrice.value||0);
+      if(!name || qty<=0 || price<0) return alert('بيانات عنصر غير صالحة');
+      draft.items.push({name,qty,price}); r.itemName.value=''; r.itemQty.value=1; r.itemPrice.value='';
+      saveDraft(); renderDraft();
+    };
+    r.save.onclick=()=>{
+      if(!draft.date) draft.date=new Date().toISOString().slice(0,10);
+      invoices.push({id:Date.now(),customer:draft.customer,date:draft.date,items:[...draft.items]});
+      db.set('invoices',invoices);
+      draft={id:null,customer:'',date:'',items:[]}; saveDraft(); renderDraft(); renderList(); refreshKPIs();
+      alert('تم حفظ الفاتورة.');
+    };
+    r.print.onclick=()=>window.print();
+    r.export.onclick=()=>{
+      const blob=new Blob([JSON.stringify(draft,null,2)],{type:'application/json'});
+      const url=URL.createObjectURL(blob); const a=document.createElement('a'); a.href=url; a.download='bill-draft.json'; a.click(); URL.revokeObjectURL(url);
+    };
+    r.reset.onclick=()=>{ if(confirm('مسح عناصر الفاتورة الحالية؟')){ draft.items=[]; saveDraft(); renderDraft(); } };
+    r.customer.oninput=()=>{ draft.customer=r.customer.value; saveDraft(); };
+    r.date.oninput=()=>{ draft.date=r.date.value; saveDraft(); };
+    r.search.oninput=renderList;
+
+    renderDraft(); renderList(); refreshKPIs();
+  }
+
+  /* ============ الرزنامة ============ */
+  let calendarInitialized=false;
+  function initCalendarOnce(){ if(!calendarInitialized){ calendarInitialized=true; initCalendar(); } }
+
+  function initCalendar(){
+    let events = db.get('events',[]);
+    const t = {
+      title: document.getElementById('eventTitle'),
+      date: document.getElementById('eventDate'),
+      add: document.getElementById('addEventBtn'),
+      tbody: document.getElementById('eventsTbody')
+    };
+
+    function save(){ db.set('events',events); refreshKPIs(); }
+    function render(){
+      t.tbody.innerHTML='';
+      events.sort((a,b)=> a.date.localeCompare(b.date));
+      events.forEach((e,i)=>{
+        const tr=document.createElement('tr');
+        tr.innerHTML=`<td>${e.date}</td><td>${e.title}</td><td class="no-print"><button class="btn" onclick="window.e_del(${i})">حذف</button></td>`;
+        t.tbody.appendChild(tr);
+      });
+    }
+    window.e_del=(i)=>{ events.splice(i,1); save(); render(); };
+
+    t.add.onclick=()=>{
+      const title=t.title.value.trim(); const date=t.date.value;
+      if(!title || !date) return;
+      events.push({title,date}); t.title.value=''; t.date.value='';
+      save(); render();
+    };
+
+    render(); refreshKPIs();
+  }
+
+  /* ============ تصدير/استيراد شامل ============ */
+  function exportAll(){
+    const data = {
+      products: db.get('products',[]),
+      invoices: db.get('invoices',[]),
+      bill_draft: db.get('bill_draft',{id:null,customer:'',date:'',items:[]}),
+      events: db.get('events',[]),
+      meta: { app:'E‑Smart My Home Dash', ts: Date.now() }
+    };
+    const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
+    const url=URL.createObjectURL(blob); const a=document.createElement('a'); a.href=url; a.download='esmart-backup.json'; a.click(); URL.revokeObjectURL(url);
+  }
+  document.getElementById('exportAllBtn').onclick=exportAll;
+  document.getElementById('exportAllBtn2').onclick=exportAll;
+  document.getElementById('importAllBtn').onclick=()=>document.getElementById('importAllFile').click();
+  document.getElementById('importAllFile').onchange=(e)=>{
+    const f=e.target.files[0]; if(!f) return;
+    const r=new FileReader(); r.onload=ev=>{
+      try{
+        const d=JSON.parse(ev.target.result);
+        if(!d || typeof d!=='object') throw 'bad';
+        if(d.products) db.set('products',d.products);
+        if(d.invoices) db.set('invoices',d.invoices);
+        if(d.bill_draft) db.set('bill_draft',d.bill_draft);
+        if(d.events) db.set('events',d.events);
+        alert('تم استيراد النسخة الاحتياطية.');
+        location.reload();
+      }catch{ alert('ملف غير صالح.'); }
+    }; r.readAsText(f);
+  };
+
+  /* ============ مزامنة خادمية اختيارية ============ */
+  document.getElementById('syncBtn').onclick=async()=>{
+    const payload = {
+      products: db.get('products',[]),
+      invoices: db.get('invoices',[]),
+      events: db.get('events',[])
+    };
+    try{
+      const res = await fetch('/api/sync', {
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body: JSON.stringify(payload)
+      });
+      if(res.ok){ const out=await res.json().catch(()=>({}));
+        alert('✅ مزامنة ناجحة' + (out.message?(' — '+out.message):''));
+      } else { alert('⚠️ الخادم متاح لكن المزامنة فشلت.'); }
+    }catch{
+      alert('⚠️ لا يوجد خادم. العمل مستمر أوفلاين.');
+    }
+  };
+
+  /* ============ PWA: Manifest + Service Worker ============ */
+  (function setupManifest(){
+    const manifest = {
+      name: "E‑Smart My Home Dash",
+      short_name: "E‑Smart",
+      start_url: "./",
+      scope: "./",
+      display: "standalone",
+      background_color: "#0B0B0B",
+      theme_color: "#D4AF37",
+      icons: []
+    };
+    const blob=new Blob([JSON.stringify(manifest)],{type:'application/json'});
+    const url=URL.createObjectURL(blob);
+    const link=document.createElement('link'); link.rel='manifest'; link.href=url;
+    document.head.appendChild(link);
+  })();
+
   if('serviceWorker' in navigator){
-    // كود SW كـ Blob لتضمينه بنفس الملف
-    const swCode = `
-      const CACHE = 'esmart-cache-v1';
-      self.addEventListener('install', e=>{
-        e.waitUntil(
-          caches.open(CACHE).then(c=>c.addAll([
-            './',
-          ]))
-        );
+    const sw = `
+      const CACHE='esmart-v1';
+      const ASSETS=['./'];
+      self.addEventListener('install',e=>{
+        e.waitUntil(caches.open(CACHE).then(c=>c.addAll(ASSETS)));
         self.skipWaiting();
       });
-      self.addEventListener('fetch', e=>{
+      self.addEventListener('activate',e=>{
+        e.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(k=>k!==CACHE).map(k=>caches.delete(k)))));
+        self.clients.claim();
+      });
+      self.addEventListener('fetch',e=>{
+        const req=e.request;
         e.respondWith(
-          caches.match(e.request).then(r=>r||fetch(e.request))
+          caches.match(req).then(cached=>{
+            const fetchP = fetch(req).then(res=>{
+              const copy = res.clone();
+              caches.open(CACHE).then(c=>c.put(req,copy)).catch(()=>{});
+              return res;
+            }).catch(()=>cached);
+            return cached || fetchP;
+          })
         );
       });
     `;
-    const blob = new Blob([swCode],{type:'text/javascript'});
-    const swUrl = URL.createObjectURL(blob);
-    navigator.serviceWorker.register(swUrl).catch(console.error);
+    const blob=new Blob([sw],{type:'text/javascript'});
+    const url=URL.createObjectURL(blob);
+    navigator.serviceWorker.register(url).catch(console.error);
   }
 
-  // طلب تثبيت PWA
-  let deferredPrompt;
-  window.addEventListener('beforeinstallprompt', e=>{
-    e.preventDefault();
-    deferredPrompt = e;
+  let deferredPrompt=null;
+  window.addEventListener('beforeinstallprompt',e=>{
+    e.preventDefault(); deferredPrompt=e;
     document.getElementById('installBtn').style.display='inline-block';
   });
-  document.getElementById('installBtn').onclick = ()=>{
-    if(deferredPrompt){
-      deferredPrompt.prompt();
-      deferredPrompt.userChoice.then(()=>deferredPrompt=null);
-    }
+  document.getElementById('installBtn').onclick=()=>{
+    if(deferredPrompt){ deferredPrompt.prompt(); deferredPrompt.userChoice.finally(()=> deferredPrompt=null); }
   };
+
+  /* ============ لغة صورية ============ */
+  document.getElementById('applyLangBtn').onclick=()=>{
+    const lang=document.getElementById('langSelect').value;
+    alert('تم ضبط اللغة: '+lang+' (واجهة متعددة اللغات جاهزة للإدماج)');
+  };
+
+  /* ============ تهيئة أولية ============ */
+  refreshKPIs(); // KPIs عند التحميل
   </script>
 </body>
 </html>
